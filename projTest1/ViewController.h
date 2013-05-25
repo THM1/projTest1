@@ -8,7 +8,10 @@
 
 #import <UIKit/UIKit.h>
 #import <GLKit/GLKit.h>
+#import "Node.h"
 
-@interface ViewController : GLKViewController
+@interface ViewController : GLKViewController{
+    Node* nodes[50];
+}
 
 @end

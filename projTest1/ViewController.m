@@ -74,11 +74,20 @@ GLfloat gCubeVertexData[216] =
     -0.5f, 0.5f, -0.5f,        0.0f, 0.0f, -1.0f
 };
 
+
+float _translate[9] = {1.0f, 1.0f, 1.0f, 2.0f, 2.0f, 2.0f, 3.0f, 0.0f, 0.0f};
 @interface ViewController () {
     GLuint _program;
     
     GLKMatrix4 _modelViewProjectionMatrix;
     GLKMatrix3 _normalMatrix;
+    
+    GLKMatrix4 _modelView[3];
+    GLKMatrix3 _normal[3];
+    
+    GLKMatrix4 nodeModelView[50];
+    GLKMatrix3 nodeNormal[50];
+    
     float _rotation;
     
     GLuint _vertexArray;
@@ -90,6 +99,7 @@ GLfloat gCubeVertexData[216] =
 - (void)setupGL;
 - (void)tearDownGL;
 
+- (BOOL)setupNodes;
 - (BOOL)loadShaders;
 - (BOOL)compileShader:(GLuint *)shader type:(GLenum)type file:(NSString *)file;
 - (BOOL)linkProgram:(GLuint)prog;
@@ -112,7 +122,13 @@ GLfloat gCubeVertexData[216] =
     view.context = self.context;
     view.drawableDepthFormat = GLKViewDrawableDepthFormat24;
     
+    BOOL check = [self setupNodes];
+    if(!check){
+        NSLog(@"Could not generate Node data successfully");
+        exit(1);
+    }
     [self setupGL];
+    
 }
 
 - (void)dealloc
@@ -122,6 +138,7 @@ GLfloat gCubeVertexData[216] =
     if ([EAGLContext currentContext] == self.context) {
         [EAGLContext setCurrentContext:nil];
     }
+    
 }
 
 - (void)didReceiveMemoryWarning
@@ -142,8 +159,26 @@ GLfloat gCubeVertexData[216] =
     // Dispose of any resources that can be recreated.
 }
 
+-(BOOL)setupNodes
+{
+    float pt[3] = {1.0, 1.0, 0.0};
+    float col[4] = {1.0, 1.0, 0.4, 1.0};
+    float size = 0.5;
+    
+    for(int i=0; i<50; i++){
+        Node* node = [[Node alloc] initPoint:pt colour:col size:size];
+        nodes[i] = node;
+        pt[1] += 0.5f;
+        pt[2] += 0.5f;
+        //[node dealloc];
+    }
+
+    return YES;
+}
+
 - (void)setupGL
 {
+    
     [EAGLContext setCurrentContext:self.context];
     
     [self loadShaders];
@@ -160,7 +195,7 @@ GLfloat gCubeVertexData[216] =
     glGenBuffers(1, &_vertexBuffer);
     glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
     glBufferData(GL_ARRAY_BUFFER, sizeof(gCubeVertexData), gCubeVertexData, GL_STATIC_DRAW);
-    
+
     glEnableVertexAttribArray(GLKVertexAttribPosition);
     glVertexAttribPointer(GLKVertexAttribPosition, 3, GL_FLOAT, GL_FALSE, 24, BUFFER_OFFSET(0));
     glEnableVertexAttribArray(GLKVertexAttribNormal);
@@ -193,18 +228,18 @@ GLfloat gCubeVertexData[216] =
     
     self.effect.transform.projectionMatrix = projectionMatrix;
     
-    GLKMatrix4 baseModelViewMatrix = GLKMatrix4MakeTranslation(0.0f, 0.0f, -4.0f);
+    GLKMatrix4 baseModelViewMatrix = GLKMatrix4MakeTranslation(0.0f, 0.0f, -14.0f);
     baseModelViewMatrix = GLKMatrix4Rotate(baseModelViewMatrix, _rotation, 0.0f, 1.0f, 0.0f);
     
     // Compute the model view matrix for the object rendered with GLKit
-    GLKMatrix4 modelViewMatrix = GLKMatrix4MakeTranslation(0.0f, 0.0f, -1.5f);
+    GLKMatrix4 modelViewMatrix = GLKMatrix4MakeTranslation(0.0f, 0.0f, 0.0f);
     modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, _rotation, 1.0f, 1.0f, 1.0f);
     modelViewMatrix = GLKMatrix4Multiply(baseModelViewMatrix, modelViewMatrix);
     
     self.effect.transform.modelviewMatrix = modelViewMatrix;
     
     // Compute the model view matrix for the object rendered with ES2
-    modelViewMatrix = GLKMatrix4MakeTranslation(0.0f, 0.0f, 1.5f);
+    modelViewMatrix = GLKMatrix4MakeTranslation(0.0f, 0.0f, 4.5f);
     modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, _rotation, 1.0f, 1.0f, 1.0f);
     modelViewMatrix = GLKMatrix4Multiply(baseModelViewMatrix, modelViewMatrix);
     
@@ -212,7 +247,13 @@ GLfloat gCubeVertexData[216] =
     
     _modelViewProjectionMatrix = GLKMatrix4Multiply(projectionMatrix, modelViewMatrix);
     
-    _rotation += self.timeSinceLastUpdate * 0.5f;
+    for(int i=0; i<50; i++){
+        [nodes[i] calculateModelView:&nodeModelView[i] andNormal:&nodeNormal[i] withBase:&baseModelViewMatrix andProjection:&projectionMatrix andRotation:&_rotation];
+    }
+    
+    _rotation += self.timeSinceLastUpdate * 1.5f;
+    
+    
 }
 
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect
@@ -234,6 +275,15 @@ GLfloat gCubeVertexData[216] =
     glUniformMatrix3fv(uniforms[UNIFORM_NORMAL_MATRIX], 1, 0, _normalMatrix.m);
     
     glDrawArrays(GL_TRIANGLES, 0, 36);
+    
+    for(int i=0; i<50; i++){
+        //glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, nodeModelView[i].m);
+        //glUniformMatrix3fv(uniforms[UNIFORM_NORMAL_MATRIX], 1, 0, nodeNormal[i].m);
+        
+        //glDrawArrays(GL_TRIANGLES, 0, 36);
+        [nodes[i] draw:&_vertexArray withModelView:&nodeModelView[i] withNormal:&nodeNormal[i]];
+    }
+    
 }
 
 #pragma mark -  OpenGL ES 2 shader compilation
@@ -265,11 +315,12 @@ GLfloat gCubeVertexData[216] =
     
     // Attach fragment shader to program.
     glAttachShader(_program, fragShader);
-    
+
     // Bind attribute locations.
     // This needs to be done prior to linking.
     glBindAttribLocation(_program, GLKVertexAttribPosition, "position");
     glBindAttribLocation(_program, GLKVertexAttribNormal, "normal");
+    glBindAttribLocation(_program, GLKVertexAttribColor, "colour");
     
     // Link program.
     if (![self linkProgram:_program]) {

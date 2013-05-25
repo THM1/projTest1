@@ -29,11 +29,11 @@ static const GLubyte tetraColour[] = {
 
 @interface Node : NSObject <Graphics, _Point>{
 @private
-    GLfloat point[3];
-    GLfloat col[4];
-    GLfloat radSize;
+    float _point[3];
+    float _col[4];
+    float _radSize;
 }
 
--(Node *) initPoint: (GLfloat *) pt colour: (GLfloat *) _col size: (GLfloat) _size;
+-(Node *) initPoint: (float *) pt colour: (float *) col size: (float) size;
 
 @end

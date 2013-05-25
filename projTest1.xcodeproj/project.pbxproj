@@ -28,6 +28,7 @@
 		77993003174BE8AE002C251E /* InfoPlist.strings in Resources */ = {isa = PBXBuildFile; fileRef = 77993001174BE8AE002C251E /* InfoPlist.strings */; };
 		77993006174BE8AE002C251E /* projTest1Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 77993005174BE8AE002C251E /* projTest1Tests.m */; };
 		77993013174BE90C002C251E /* Node.m in Sources */ = {isa = PBXBuildFile; fileRef = 77993012174BE90C002C251E /* Node.m */; };
+		77993014174EE891002C251E /* Node.m in Sources */ = {isa = PBXBuildFile; fileRef = 77993012174BE90C002C251E /* Node.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -295,6 +296,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				77993014174EE891002C251E /* Node.m in Sources */,
 				77992FDD174BE8AD002C251E /* main.m in Sources */,
 				77992FE1174BE8AD002C251E /* AppDelegate.m in Sources */,
 				77992FF1174BE8AD002C251E /* ViewController.m in Sources */,
@@ -481,6 +483,7 @@
 				7799300B174BE8AE002C251E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 		7799300C174BE8AE002C251E /* Build configuration list for PBXNativeTarget "projTest1Tests" */ = {
 			isa = XCConfigurationList;
@@ -489,6 +492,7 @@
 				7799300E174BE8AE002C251E /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
 		};
 /* End XCConfigurationList section */
 	};

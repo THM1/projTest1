@@ -14,6 +14,6 @@
 
 @protocol _Point <NSObject>
 
--(void) setPoint: (GLfloat *) _pt;
-
+-(void) setPoint: (float *) pt;
+-(void) getPoint: (float *) pt;
 @end
