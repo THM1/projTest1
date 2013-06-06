@@ -14,7 +14,8 @@
 
 @protocol Graphics <NSObject>
 
--(void) draw: (GLuint *)_vertexArray withModelView:(GLKMatrix4 *)_modelView withNormal:(GLKMatrix3 *)_normal;
+-(void) draw: (GLuint *)_vertexArray withModelView:(GLKMatrix4 *)_modelView withNormal:(GLKMatrix3 *)_normal withProgram:(GLuint *)_program;
+-(void) drawLinks: (GLuint *) _linkArray;
 -(void) redraw;
 -(void) deleteObj;
 -(void) selectObj;

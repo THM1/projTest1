@@ -23,28 +23,23 @@
 }
 
 
--(void) draw: (GLuint *)_vertexArray withModelView:(GLKMatrix4 *)_modelView withNormal:(GLKMatrix3 *)_normal
+-(void) draw: (GLuint *)_vertexArray withModelView:(GLKMatrix4 *)_modelView withNormal:(GLKMatrix3 *)_normal withProgram:(GLuint *)_program
 {
-    GLint UNIFORM_MODELVIEW_MATRIX = 0, UNIFORM_NORMAL_MATRIX = 1;
+    //GLint UNIFORM_MODELVIEW_MATRIX = 0, UNIFORM_NORMAL_MATRIX = 1;
     
-    glUniformMatrix4fv(UNIFORM_MODELVIEW_MATRIX, 1, 0, _modelView->m);
-    glUniformMatrix3fv(UNIFORM_NORMAL_MATRIX, 1, 0, _normal->m);
+    //glUseProgram(*_program);
+    
+    //glUniformMatrix4fv(UNIFORM_MODELVIEW_MATRIX, 1, 0, _modelView->m);
+    //glUniformMatrix3fv(UNIFORM_NORMAL_MATRIX, 1, 0, _normal->m);
 
     glDrawArrays(GL_TRIANGLES, 0, 36);
-    
-    /*
-    glVertexPointer(3, GL_FLOAT, 0, tetraVertices);
-    glEnableClientState(GL_VERTEX_ARRAY);
-    glColorPointer(4, GL_UNSIGNED_BYTE, 0, tetraColour);
-    glEnableClientState(GL_COLOR_ARRAY);
-    
-    glPushMatrix();
-    //glLoadIdentity();
-    glTranslatef(point[0], point[1], point[2]);
-    
-    glDrawArrays(GL_TRIANGLE_STRIP, 0, 6);
-    glPopMatrix();
-    */
+    //glDrawArrays(GL_LINES, 0, 36);
+
+}
+
+-(void) drawLinks:(GLuint *)_linkArray
+{    
+    glDrawArrays(GL_LINES, 0, 2);
 }
 
 -(void) redraw{}
@@ -91,7 +86,7 @@
 {
     *_modelView = GLKMatrix4Identity;
     *_modelView = GLKMatrix4MakeTranslation(_point[0], _point[1], _point[2]);
-    *_modelView = GLKMatrix4Rotate(*_modelView, *rotation, -1.0f, -2.0f, -1.0f);
+    //*_modelView = GLKMatrix4Rotate(*_modelView, *rotation, -1.0f, -2.0f, -1.0f);
     *_modelView = GLKMatrix4Scale(*_modelView, _radSize, _radSize, _radSize);
     *_modelView = GLKMatrix4Multiply(*baseModelView, *_modelView);
     
@@ -103,6 +98,24 @@
 -(float) getSize
 {
     return _radSize;
+}
+
+-(void) setLinks: (Node *) nodes
+{
+    for(int i=0; i<50; i++){
+        float pt[3];
+        //[*nodes[i] getPoint:pt];
+        
+        // first node in link
+        _nodeLinkData[i*6] = pt[0];
+        _nodeLinkData[i*6 + 1] = pt[1];
+        _nodeLinkData[i*6 + 2] = pt[2];
+        
+        // second node in link
+        _nodeLinkData[i*6 + 3] = _point[0];
+        _nodeLinkData[i*6 + 4] = _point[1];
+        _nodeLinkData[i*6 + 5] = _point[2];
+    }
 }
 
 

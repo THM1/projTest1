@@ -32,8 +32,11 @@ static const GLubyte tetraColour[] = {
     float _point[3];
     float _col[4];
     float _radSize;
+    
+    GLfloat _nodeLinkData[300];
 }
 
 -(Node *) initPoint: (float *) pt colour: (float *) col size: (float) size;
+-(void) setLinks: (Node *) _nodes;
 
 @end

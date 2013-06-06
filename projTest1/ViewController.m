@@ -10,72 +10,10 @@
 
 #define BUFFER_OFFSET(i) ((char *)NULL + (i))
 
-// Uniform index.
-enum
-{
-    UNIFORM_MODELVIEWPROJECTION_MATRIX,
-    UNIFORM_NORMAL_MATRIX,
-    NUM_UNIFORMS
-};
-GLint uniforms[NUM_UNIFORMS];
-
-// Attribute index.
-enum
-{
-    ATTRIB_VERTEX,
-    ATTRIB_NORMAL,
-    NUM_ATTRIBUTES
-};
-
-GLfloat gCubeVertexData[216] = 
-{
-    // Data layout for each line below is:
-    // positionX, positionY, positionZ,     normalX, normalY, normalZ,
-    0.5f, -0.5f, -0.5f,        1.0f, 0.0f, 0.0f,
-    0.5f, 0.5f, -0.5f,         1.0f, 0.0f, 0.0f,
-    0.5f, -0.5f, 0.5f,         1.0f, 0.0f, 0.0f,
-    0.5f, -0.5f, 0.5f,         1.0f, 0.0f, 0.0f,
-    0.5f, 0.5f, -0.5f,          1.0f, 0.0f, 0.0f,
-    0.5f, 0.5f, 0.5f,         1.0f, 0.0f, 0.0f,
-    
-    0.5f, 0.5f, -0.5f,         0.0f, 1.0f, 0.0f,
-    -0.5f, 0.5f, -0.5f,        0.0f, 1.0f, 0.0f,
-    0.5f, 0.5f, 0.5f,          0.0f, 1.0f, 0.0f,
-    0.5f, 0.5f, 0.5f,          0.0f, 1.0f, 0.0f,
-    -0.5f, 0.5f, -0.5f,        0.0f, 1.0f, 0.0f,
-    -0.5f, 0.5f, 0.5f,         0.0f, 1.0f, 0.0f,
-    
-    -0.5f, 0.5f, -0.5f,        -1.0f, 0.0f, 0.0f,
-    -0.5f, -0.5f, -0.5f,       -1.0f, 0.0f, 0.0f,
-    -0.5f, 0.5f, 0.5f,         -1.0f, 0.0f, 0.0f,
-    -0.5f, 0.5f, 0.5f,         -1.0f, 0.0f, 0.0f,
-    -0.5f, -0.5f, -0.5f,       -1.0f, 0.0f, 0.0f,
-    -0.5f, -0.5f, 0.5f,        -1.0f, 0.0f, 0.0f,
-    
-    -0.5f, -0.5f, -0.5f,       0.0f, -1.0f, 0.0f,
-    0.5f, -0.5f, -0.5f,        0.0f, -1.0f, 0.0f,
-    -0.5f, -0.5f, 0.5f,        0.0f, -1.0f, 0.0f,
-    -0.5f, -0.5f, 0.5f,        0.0f, -1.0f, 0.0f,
-    0.5f, -0.5f, -0.5f,        0.0f, -1.0f, 0.0f,
-    0.5f, -0.5f, 0.5f,         0.0f, -1.0f, 0.0f,
-    
-    0.5f, 0.5f, 0.5f,          0.0f, 0.0f, 1.0f,
-    -0.5f, 0.5f, 0.5f,         0.0f, 0.0f, 1.0f,
-    0.5f, -0.5f, 0.5f,         0.0f, 0.0f, 1.0f,
-    0.5f, -0.5f, 0.5f,         0.0f, 0.0f, 1.0f,
-    -0.5f, 0.5f, 0.5f,         0.0f, 0.0f, 1.0f,
-    -0.5f, -0.5f, 0.5f,        0.0f, 0.0f, 1.0f,
-    
-    0.5f, -0.5f, -0.5f,        0.0f, 0.0f, -1.0f,
-    -0.5f, -0.5f, -0.5f,       0.0f, 0.0f, -1.0f,
-    0.5f, 0.5f, -0.5f,         0.0f, 0.0f, -1.0f,
-    0.5f, 0.5f, -0.5f,         0.0f, 0.0f, -1.0f,
-    -0.5f, -0.5f, -0.5f,       0.0f, 0.0f, -1.0f,
-    -0.5f, 0.5f, -0.5f,        0.0f, 0.0f, -1.0f
-};
+#define MIN_ZOOM -20.0f
+#define MAX_ZOOM 0.0f
 
 
-float _translate[9] = {1.0f, 1.0f, 1.0f, 2.0f, 2.0f, 2.0f, 3.0f, 0.0f, 0.0f};
 @interface ViewController () {
     GLuint _program;
     
@@ -88,16 +26,21 @@ float _translate[9] = {1.0f, 1.0f, 1.0f, 2.0f, 2.0f, 2.0f, 3.0f, 0.0f, 0.0f};
     GLKMatrix4 nodeModelView[50];
     GLKMatrix3 nodeNormal[50];
     
-    float _rotation;
     
-    GLuint _vertexArray;
-    GLuint _vertexBuffer;
+    float _rotationX, _rotationY;
+    float _rotation;
+    float _zValue;
+    
+    GLuint _vertexArray, _connectArray;
+    GLuint _vertexBuffer, _connectBuffer;
 }
 @property (strong, nonatomic) EAGLContext *context;
 @property (strong, nonatomic) GLKBaseEffect *effect;
 
 - (void)setupGL;
 - (void)tearDownGL;
+- (void)panRecognizer: (UIPanGestureRecognizer *)recognizer;
+- (void)pinchRecognizer: (UIPinchGestureRecognizer *)recognizer;
 
 - (BOOL)setupNodes;
 - (BOOL)loadShaders;
@@ -112,6 +55,10 @@ float _translate[9] = {1.0f, 1.0f, 1.0f, 2.0f, 2.0f, 2.0f, 3.0f, 0.0f, 0.0f};
 {
     [super viewDidLoad];
     
+    // init Values
+    _rotation = 0.0f;
+    _zValue = -10.0f;
+    
     self.context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
 
     if (!self.context) {
@@ -122,11 +69,24 @@ float _translate[9] = {1.0f, 1.0f, 1.0f, 2.0f, 2.0f, 2.0f, 3.0f, 0.0f, 0.0f};
     view.context = self.context;
     view.drawableDepthFormat = GLKViewDrawableDepthFormat24;
     
+    
+    UIPanGestureRecognizer *panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panRecognizer:)];
+    panRecognizer.minimumNumberOfTouches = 1;
+    panRecognizer.maximumNumberOfTouches = 1;
+    [self.view addGestureRecognizer:panRecognizer];
+    
+    UIPinchGestureRecognizer *pinchRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(pinchRecognizer:)];
+    [self.view addGestureRecognizer:pinchRecognizer];
+    
+    
+    // generate or load the node data
     BOOL check = [self setupNodes];
     if(!check){
         NSLog(@"Could not generate Node data successfully");
         exit(1);
     }
+    
+    // setup the gl screen
     [self setupGL];
     
 }
@@ -159,20 +119,74 @@ float _translate[9] = {1.0f, 1.0f, 1.0f, 2.0f, 2.0f, 2.0f, 3.0f, 0.0f, 0.0f};
     // Dispose of any resources that can be recreated.
 }
 
+
+// function to modify camera position when user slides finger on screen
+-(void)panRecognizer: (UIPanGestureRecognizer *)recognizer
+{
+    CGPoint translate = [recognizer translationInView:self.view];
+    
+    _rotationX += translate.x * 0.01;
+    _rotationY += translate.y * 0.001;
+    /*if(translate.x >0)_rotationX += 0.01;
+    if(translate.x <0)_rotationX -= 0.01;
+    if(translate.y >0)_rotationY += 0.01;
+    if(translate.y <0)_rotationY -= 0.01;*/
+}
+
+// function to modify camera zoom when user pinches screen
+-(void)pinchRecognizer: (UIPinchGestureRecognizer *)recognizer
+{
+    static float lastScale = 0.0f;
+    
+    NSLog(@"Pinch scale: %f", recognizer.scale);
+    //CGAffineTransform transform = CGAffineTransformMakeScale(recognizer.scale, recognizer.scale);
+    // you can implement any int/float value in context of what scale you want to zoom in or out
+    
+    if(recognizer.scale > lastScale){
+        if(_zValue < MAX_ZOOM) _zValue += 0.1;
+        lastScale = recognizer.scale;
+    }
+    
+    if(recognizer.scale < lastScale){
+        if(_zValue > MIN_ZOOM) _zValue -= 0.1;
+        lastScale = recognizer.scale;
+    }
+    //_zValue += recognizer.scale * 0.1;
+}
+
 -(BOOL)setupNodes
 {
-    float pt[3] = {1.0, 1.0, 0.0};
+    float pt[3];
     float col[4] = {1.0, 1.0, 0.4, 1.0};
-    float size = 0.5;
+    float size = 0.2;
     
     for(int i=0; i<50; i++){
+        float ptX = ((float)rand()/RAND_MAX) * 10 - 3;
+        float ptY = ((float)rand()/RAND_MAX) * 10 - 5;
+        float ptZ = ((float)rand()/RAND_MAX) * 10 - 7;
+        
+        pt[0] = ptX;
+        pt[1] = ptY;
+        pt[2] = ptZ;
+        
         Node* node = [[Node alloc] initPoint:pt colour:col size:size];
         nodes[i] = node;
-        pt[1] += 0.5f;
-        pt[2] += 0.5f;
-        //[node dealloc];
     }
+    /*
+    glGenVertexArraysOES(1, &_connectArray);
+    glBindVertexArrayOES(_connectArray);
 
+    glGenBuffers(1, &_connectBuffer);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _connectBuffer);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(gCubeVertexData), gCubeVertexData, GL_STATIC_DRAW);
+    
+    glEnableVertexAttribArray(GLKVertexAttribPosition);
+    glVertexAttribPointer(GLKVertexAttribPosition, 2, GL_FLOAT, GL_FALSE, 8, BUFFER_OFFSET(0));
+    glEnableVertexAttribArray(GLKVertexAttribNormal);
+    glVertexAttribPointer(GLKVertexAttribNormal, 3, GL_FLOAT, GL_FALSE, 24, BUFFER_OFFSET(12));
+    
+    glBindVertexArrayOES(0);*/
+    
     return YES;
 }
 
@@ -202,6 +216,14 @@ float _translate[9] = {1.0f, 1.0f, 1.0f, 2.0f, 2.0f, 2.0f, 3.0f, 0.0f, 0.0f};
     glVertexAttribPointer(GLKVertexAttribNormal, 3, GL_FLOAT, GL_FALSE, 24, BUFFER_OFFSET(12));
     
     glBindVertexArrayOES(0);
+    
+    glGenBuffers(1, &_connectBuffer);
+    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _connectBuffer);
+    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(lineData), lineData, GL_STATIC_DRAW);
+    
+    glEnableVertexAttribArray(GLKVertexAttribPosition);
+    glVertexAttribPointer(GLKVertexAttribPosition, 3, GL_FLOAT, GL_FALSE, 12, BUFFER_OFFSET(0));
+    
 }
 
 - (void)tearDownGL
@@ -228,12 +250,15 @@ float _translate[9] = {1.0f, 1.0f, 1.0f, 2.0f, 2.0f, 2.0f, 3.0f, 0.0f, 0.0f};
     
     self.effect.transform.projectionMatrix = projectionMatrix;
     
-    GLKMatrix4 baseModelViewMatrix = GLKMatrix4MakeTranslation(0.0f, 0.0f, -14.0f);
-    baseModelViewMatrix = GLKMatrix4Rotate(baseModelViewMatrix, _rotation, 0.0f, 1.0f, 0.0f);
+    GLKMatrix4 baseModelViewMatrix = GLKMatrix4MakeTranslation(0.0f, 0.0f, _zValue);//-10.0f);
+    //baseModelViewMatrix = GLKMatrix4Rotate(baseModelViewMatrix, _rotation, 0.0f, 1.0f, 0.0f);
+    baseModelViewMatrix = GLKMatrix4Rotate(baseModelViewMatrix, _rotationX, 0.0f, 1.0f, 0.0f);
+    baseModelViewMatrix = GLKMatrix4Rotate(baseModelViewMatrix, _rotationY, 0.0f, 0.0f, 1.0f);
+    
     
     // Compute the model view matrix for the object rendered with GLKit
     GLKMatrix4 modelViewMatrix = GLKMatrix4MakeTranslation(0.0f, 0.0f, 0.0f);
-    modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, _rotation, 1.0f, 1.0f, 1.0f);
+    //modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, _rotation, 1.0f, 1.0f, 1.0f);
     modelViewMatrix = GLKMatrix4Multiply(baseModelViewMatrix, modelViewMatrix);
     
     self.effect.transform.modelviewMatrix = modelViewMatrix;
@@ -251,41 +276,47 @@ float _translate[9] = {1.0f, 1.0f, 1.0f, 2.0f, 2.0f, 2.0f, 3.0f, 0.0f, 0.0f};
         [nodes[i] calculateModelView:&nodeModelView[i] andNormal:&nodeNormal[i] withBase:&baseModelViewMatrix andProjection:&projectionMatrix andRotation:&_rotation];
     }
     
-    _rotation += self.timeSinceLastUpdate * 1.5f;
+    //_rotation += self.timeSinceLastUpdate * 0.5f;
     
     
 }
 
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect
 {
+
+    
     glClearColor(0.65f, 0.65f, 0.65f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
     glBindVertexArrayOES(_vertexArray);
     
     // Render the object with GLKit
-    [self.effect prepareToDraw];
+    /*[self.effect prepareToDraw];
     
-    glDrawArrays(GL_TRIANGLES, 0, 36);
+    glDrawArrays(GL_TRIANGLES, 0, 36);*/
     
     // Render the object again with ES2
     glUseProgram(_program);
     
-    glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, _modelViewProjectionMatrix.m);
-    glUniformMatrix3fv(uniforms[UNIFORM_NORMAL_MATRIX], 1, 0, _normalMatrix.m);
-    
-    glDrawArrays(GL_TRIANGLES, 0, 36);
-    
     for(int i=0; i<50; i++){
-        //glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, nodeModelView[i].m);
-        //glUniformMatrix3fv(uniforms[UNIFORM_NORMAL_MATRIX], 1, 0, nodeNormal[i].m);
+        glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, nodeModelView[i].m);
+        glUniformMatrix3fv(uniforms[UNIFORM_NORMAL_MATRIX], 1, 0, nodeNormal[i].m);
         
-        //glDrawArrays(GL_TRIANGLES, 0, 36);
-        [nodes[i] draw:&_vertexArray withModelView:&nodeModelView[i] withNormal:&nodeNormal[i]];
+        // draw each node
+        [nodes[i] draw:&_vertexArray withModelView:&nodeModelView[i] withNormal:&nodeNormal[i] withProgram:&_program];
     }
     
+    /*
+    glBindVertexArrayOES(_connectArray);
+    //glUseProgram(_program);
+    
+    //glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, _modelViewProjectionMatrix.m);
+    //glUniformMatrix3fv(uniforms[UNIFORM_NORMAL_MATRIX], 1, 0, _normalMatrix.m);
+    [self.effect prepareToDraw];
+    glDrawArrays(GL_LINES, 0, 2);*/
+    
+    
 }
-
 #pragma mark -  OpenGL ES 2 shader compilation
 
 - (BOOL)loadShaders
