@@ -12,10 +12,10 @@
 
 #define MIN_ZOOM -20.0f
 #define MAX_ZOOM 0.0f
-
+#define PERSPECTIVE_ANGLE 80.0f
 
 @interface ViewController () {
-    GLuint _program;
+    GLuint _program, _program2;
     
     GLKMatrix4 _modelViewProjectionMatrix;
     GLKMatrix3 _normalMatrix;
@@ -23,12 +23,12 @@
     GLKMatrix4 _modelView[3];
     GLKMatrix3 _normal[3];
     
-    GLKMatrix4 nodeModelView[50];
-    GLKMatrix3 nodeNormal[50];
+    GLKMatrix4 nodeModelView[NUM_NODES];
+    GLKMatrix3 nodeNormal[NUM_NODES];
     
     
-    float _rotationX, _rotationY;
-    float _rotation;
+    float _rotationX, _rotationY, _rotation[2];
+    float _translate[3];
     float _zValue;
     
     GLuint _vertexArray, _connectArray;
@@ -56,7 +56,7 @@
     [super viewDidLoad];
     
     // init Values
-    _rotation = 0.0f;
+    //_rotation = 0.0f;
     _zValue = -10.0f;
     
     self.context = [[EAGLContext alloc] initWithAPI:kEAGLRenderingAPIOpenGLES2];
@@ -72,12 +72,14 @@
     
     UIPanGestureRecognizer *panRecognizer = [[UIPanGestureRecognizer alloc] initWithTarget:self action:@selector(panRecognizer:)];
     panRecognizer.minimumNumberOfTouches = 1;
-    panRecognizer.maximumNumberOfTouches = 1;
+    panRecognizer.maximumNumberOfTouches = 2;
     [self.view addGestureRecognizer:panRecognizer];
     
     UIPinchGestureRecognizer *pinchRecognizer = [[UIPinchGestureRecognizer alloc] initWithTarget:self action:@selector(pinchRecognizer:)];
     [self.view addGestureRecognizer:pinchRecognizer];
     
+    UITapGestureRecognizer *tapRecognizer = [[UITapGestureRecognizer alloc] initWithTarget:self action:@selector(tapRecognizer:)];
+    [self.view addGestureRecognizer:tapRecognizer];
     
     // generate or load the node data
     BOOL check = [self setupNodes];
@@ -124,9 +126,45 @@
 -(void)panRecognizer: (UIPanGestureRecognizer *)recognizer
 {
     CGPoint translate = [recognizer translationInView:self.view];
+    CGPoint prevTranslate;
     
-    _rotationX += translate.x * 0.01;
-    _rotationY += translate.y * 0.001;
+    if(UIGestureRecognizerStateBegan){
+
+    }
+    
+    if(UIGestureRecognizerStateChanged){
+
+        if(recognizer.numberOfTouches == 1){
+            //_rotationX += translate.x * 0.01f;
+            //_rotationY += translate.y * 0.001f;
+            
+            _rotation[0] += translate.x * -0.01f;
+            if(_rotation[0] >= 2*PI) _rotation[0] = 0;
+            
+            _rotation[1] += translate.y * 0.001f;
+            if(_rotation[1] >= 2*PI) _rotation[1] = 0;
+        }
+        
+        if(recognizer.numberOfTouches == 2){
+            
+            if(translate.x - prevTranslate.x > 20.5) _translate[0] += 0.1f;
+            if(translate.x - prevTranslate.x < -20.5) _translate[0] -= 0.1f;
+            
+            if(translate.y - prevTranslate.y < -20.5) _translate[1] += 0.1f;
+            if(translate.y - prevTranslate.y > 20.5) _translate[1] -= 0.1f;
+            
+            //_translate[0] = translate.x * 0.01f;
+            //_translate[1] = -translate.y * 0.01f;
+            
+            prevTranslate = translate;
+        }
+        
+    }
+    
+    if(UIGestureRecognizerStateEnded){
+        [self loadLineData];
+        NSLog(@"PAN: %f    %f", translate.x, translate.y);
+    }
     /*if(translate.x >0)_rotationX += 0.01;
     if(translate.x <0)_rotationX -= 0.01;
     if(translate.y >0)_rotationY += 0.01;
@@ -141,7 +179,7 @@
     NSLog(@"Pinch scale: %f", recognizer.scale);
     //CGAffineTransform transform = CGAffineTransformMakeScale(recognizer.scale, recognizer.scale);
     // you can implement any int/float value in context of what scale you want to zoom in or out
-    
+        
     if(recognizer.scale > lastScale){
         if(_zValue < MAX_ZOOM) _zValue += 0.1;
         lastScale = recognizer.scale;
@@ -154,13 +192,105 @@
     //_zValue += recognizer.scale * 0.1;
 }
 
+-(void) tapRecognizer: (UITapGestureRecognizer *) recognizer
+{
+    CGPoint touch = [recognizer locationInView:self.view];
+    //NSLog(@"TAP: %f   %f", (float)touch.x, (float)touch.y);
+    
+    int pixelsXY[2];
+    pixelsXY[0] = (int)self.view.bounds.size.width;  // 768
+    pixelsXY[1] = (int)self.view.bounds.size.height; // 1024
+    
+    int touchXY[2];
+    touchXY[0] = (int)touch.x;
+    touchXY[1] = (int)touch.y;
+    
+    //float screenXY[2];
+    
+    BOOL touched = false;
+    float zCurrent = _zValue;
+    float point[3];
+    int closestTouchedNode = NUM_NODES; // no node numbered NUM_NODES: zero indexxed arrays
+    
+    for(int i=0; i<NUM_NODES; i++){
+        touched = [_nodes[i] detectSelectedWithZVal:_zValue withAngle:PERSPECTIVE_ANGLE andDeltaXAndDeltaY:touchXY andPixels:pixelsXY];
+        
+        if(touched){
+            
+            [_nodes[i] getTransformedPoint:point];
+            if(point[2] > zCurrent){
+                closestTouchedNode = i;
+                zCurrent = point[2];
+            }
+            NSLog(@"TOUCHED!!! %d", i);
+        }
+        else NSLog(@"not touched %d", i);
+    }
+    
+    if(UIGestureRecognizerStateEnded){
+        if(closestTouchedNode != NUM_NODES)
+            [_nodes[closestTouchedNode] setClosestTouchedNode:TRUE];
+    
+        for(int i=0; i<NUM_NODES; i++){
+            
+            if([_nodes[i] isClosestTouchedNode])
+                NSLog(@"closest touched node: %d", closestTouchedNode);
+        }
+    }
+    //float nodes[3];
+    /*for(int i=0; i<NUM_NODES; i++){
+        [_nodes[i] getTransformedPoint: nodes];
+        NSLog(@"pos%d: %f   %f   %f", i, nodes[0], nodes[1], nodes[2]);
+        NSLog(@"%f", _zValue);
+    }*/
+    //NSLog(@"TAPPED");
+    
+}
+
+
+-(void) loadLineData
+{
+    GLfloat tempPointData[3];
+    
+    // generate all the point data of all the vertices and store in vertex data array
+    for(int i=0; i<NUM_NODES; i++){
+        
+        [_nodes[i] getTransformedPoint: tempPointData];
+        
+        _lineVertexData[i*3 + 0] = tempPointData[0];
+        _lineVertexData[i*3 + 1] = tempPointData[1];
+        _lineVertexData[i*3 + 2] = tempPointData[2];
+    }
+    
+    // record all indices of the points that will be joint together, as lines
+    // store in index data array
+    for(int i=0; i<NUM_NODES; i++){
+        for(int j=i; j<NUM_NODES; j++){
+            _lineIndexData[i*NUM_NODES*2 + j*2 + 0] = (GLuint)i;
+            _lineIndexData[i*NUM_NODES*2 + j*2 + 1] = (GLuint)j;
+        }
+    }
+    // bind node links data to _connectArray buffer
+    glGenVertexArraysOES(1, &_connectArray);
+    glBindVertexArrayOES(_connectArray);
+    
+    glGenBuffers(1, &_connectBuffer);
+    glBindBuffer(GL_ARRAY_BUFFER, _connectBuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(_lineVertexData), _lineVertexData, GL_STATIC_DRAW);
+    
+    glEnableVertexAttribArray(GLKVertexAttribPosition);
+    glVertexAttribPointer(GLKVertexAttribPosition, 3, GL_FLOAT, GL_FALSE, 12, BUFFER_OFFSET(0));
+
+}
+
 -(BOOL)setupNodes
 {
+
     float pt[3];
-    float col[4] = {1.0, 1.0, 0.4, 1.0};
+    float col[4] = {1.0, 0.4, 0.4, 1.0};
     float size = 0.2;
-    
-    for(int i=0; i<50; i++){
+
+    for(int i=0; i<NUM_NODES; i++){
         float ptX = ((float)rand()/RAND_MAX) * 10 - 3;
         float ptY = ((float)rand()/RAND_MAX) * 10 - 5;
         float ptZ = ((float)rand()/RAND_MAX) * 10 - 7;
@@ -169,25 +299,25 @@
         pt[1] = ptY;
         pt[2] = ptZ;
         
+        //pt[0] = 0.0f;
+        //pt[1] = 0.0f;
+        //pt[2] = 0.0000001f;
         Node* node = [[Node alloc] initPoint:pt colour:col size:size];
-        nodes[i] = node;
+        _nodes[i] = node;
     }
-    /*
-    glGenVertexArraysOES(1, &_connectArray);
-    glBindVertexArrayOES(_connectArray);
-
-    glGenBuffers(1, &_connectBuffer);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _connectBuffer);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(gCubeVertexData), gCubeVertexData, GL_STATIC_DRAW);
     
-    glEnableVertexAttribArray(GLKVertexAttribPosition);
-    glVertexAttribPointer(GLKVertexAttribPosition, 2, GL_FLOAT, GL_FALSE, 8, BUFFER_OFFSET(0));
-    glEnableVertexAttribArray(GLKVertexAttribNormal);
-    glVertexAttribPointer(GLKVertexAttribNormal, 3, GL_FLOAT, GL_FALSE, 24, BUFFER_OFFSET(12));
-    
-    glBindVertexArrayOES(0);*/
+    //[self loadLineData];
     
     return YES;
+}
+
+// function that loads data for drawing a sphere using GL_TRIANGLES
+// first load vertex data (position and normal), then load index data of triangles to be drawn 
+-(void)generateSphereCoords
+{
+    Sphere* s = [[Sphere alloc] initWithRows:SPHERE_ROWS andPointsPerRow:SPHERE_POINTS_PER_ROW];
+    [s createSphere:_sphereVertexArray withRows:SPHERE_ROWS andPointsPerRow:SPHERE_POINTS_PER_ROW];
+    [s calculateIndices:_sphereIndexArray withVertices:_sphereVertexArray];
 }
 
 - (void)setupGL
@@ -201,15 +331,20 @@
     self.effect.light0.enabled = GL_TRUE;
     self.effect.light0.diffuseColor = GLKVector4Make(1.0f, 0.4f, 0.4f, 1.0f);
     
+    // generate the sphere vertex array, and index array for drawing spheres using GL_TRIANGLES
+    [self generateSphereCoords];
+    
     glEnable(GL_DEPTH_TEST);
     
+    // bind sphere vertex data to _vertexArray buffer
     glGenVertexArraysOES(1, &_vertexArray);
     glBindVertexArrayOES(_vertexArray);
     
     glGenBuffers(1, &_vertexBuffer);
     glBindBuffer(GL_ARRAY_BUFFER, _vertexBuffer);
-    glBufferData(GL_ARRAY_BUFFER, sizeof(gCubeVertexData), gCubeVertexData, GL_STATIC_DRAW);
-
+    glBufferData(GL_ARRAY_BUFFER, sizeof(_sphereVertexArray), _sphereVertexArray, GL_STATIC_DRAW);
+    
+    // load position and normal data from sphereVertexArray (normal is offset by 3 GL_FLOATs)
     glEnableVertexAttribArray(GLKVertexAttribPosition);
     glVertexAttribPointer(GLKVertexAttribPosition, 3, GL_FLOAT, GL_FALSE, 24, BUFFER_OFFSET(0));
     glEnableVertexAttribArray(GLKVertexAttribNormal);
@@ -217,13 +352,21 @@
     
     glBindVertexArrayOES(0);
     
+    [self loadLineData];
+    /*
+    // bind node links data to _connectArray buffer
+    glGenVertexArraysOES(1, &_connectArray);
+    glBindVertexArrayOES(_connectArray);
+    
     glGenBuffers(1, &_connectBuffer);
-    glBindBuffer(GL_ELEMENT_ARRAY_BUFFER, _connectBuffer);
-    glBufferData(GL_ELEMENT_ARRAY_BUFFER, sizeof(lineData), lineData, GL_STATIC_DRAW);
+    glBindBuffer(GL_ARRAY_BUFFER, _connectBuffer);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(_lineVertexData), _lineVertexData, GL_STATIC_DRAW);
     
     glEnableVertexAttribArray(GLKVertexAttribPosition);
     glVertexAttribPointer(GLKVertexAttribPosition, 3, GL_FLOAT, GL_FALSE, 12, BUFFER_OFFSET(0));
-    
+    //glEnableVertexAttribArray(GLKVertexAttribNormal);
+    //glVertexAttribPointer(GLKVertexAttribNormal, 3, GL_FLOAT, GL_FALSE, 24, BUFFER_OFFSET(12));
+    */
 }
 
 - (void)tearDownGL
@@ -246,14 +389,15 @@
 - (void)update
 {
     float aspect = fabsf(self.view.bounds.size.width / self.view.bounds.size.height);
-    GLKMatrix4 projectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(65.0f), aspect, 0.1f, 100.0f);
-    
+    GLKMatrix4 projectionMatrix = GLKMatrix4MakePerspective(GLKMathDegreesToRadians(PERSPECTIVE_ANGLE), aspect, 0.1f, 100.0f);
     self.effect.transform.projectionMatrix = projectionMatrix;
     
     GLKMatrix4 baseModelViewMatrix = GLKMatrix4MakeTranslation(0.0f, 0.0f, _zValue);//-10.0f);
     //baseModelViewMatrix = GLKMatrix4Rotate(baseModelViewMatrix, _rotation, 0.0f, 1.0f, 0.0f);
-    baseModelViewMatrix = GLKMatrix4Rotate(baseModelViewMatrix, _rotationX, 0.0f, 1.0f, 0.0f);
-    baseModelViewMatrix = GLKMatrix4Rotate(baseModelViewMatrix, _rotationY, 0.0f, 0.0f, 1.0f);
+    //baseModelViewMatrix = GLKMatrix4Rotate(baseModelViewMatrix, _rotationX, 0.0f, 1.0f, 0.0f);
+    //baseModelViewMatrix = GLKMatrix4Rotate(baseModelViewMatrix, _rotationY, 1.0f, 0.0f, 0.0f);
+    
+    //baseModelViewMatrix = GLKMatrix4Translate(baseModelViewMatrix, _translate[0], _translate[1], _translate[2]);
     
     
     // Compute the model view matrix for the object rendered with GLKit
@@ -265,15 +409,15 @@
     
     // Compute the model view matrix for the object rendered with ES2
     modelViewMatrix = GLKMatrix4MakeTranslation(0.0f, 0.0f, 4.5f);
-    modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, _rotation, 1.0f, 1.0f, 1.0f);
+    //modelViewMatrix = GLKMatrix4Rotate(modelViewMatrix, _rotation, 1.0f, 1.0f, 1.0f);
     modelViewMatrix = GLKMatrix4Multiply(baseModelViewMatrix, modelViewMatrix);
     
     _normalMatrix = GLKMatrix3InvertAndTranspose(GLKMatrix4GetMatrix3(modelViewMatrix), NULL);
     
     _modelViewProjectionMatrix = GLKMatrix4Multiply(projectionMatrix, modelViewMatrix);
     
-    for(int i=0; i<50; i++){
-        [nodes[i] calculateModelView:&nodeModelView[i] andNormal:&nodeNormal[i] withBase:&baseModelViewMatrix andProjection:&projectionMatrix andRotation:&_rotation];
+    for(int i=0; i<NUM_NODES; i++){
+        [_nodes[i] calculateModelView:&nodeModelView[i] andNormal:&nodeNormal[i] withBase:&baseModelViewMatrix andProjection:&projectionMatrix andRotation:_rotation andTranslation:_translate];
     }
     
     //_rotation += self.timeSinceLastUpdate * 0.5f;
@@ -285,38 +429,48 @@
 {
 
     
-    glClearColor(0.65f, 0.65f, 0.65f, 1.0f);
+    //glClearColor(0.65f, 0.65f, 0.65f, 1.0f);
+    glClearColor(0.95f, 0.92f, 0.8f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     
     glBindVertexArrayOES(_vertexArray);
     
     // Render the object with GLKit
-    /*[self.effect prepareToDraw];
-    
-    glDrawArrays(GL_TRIANGLES, 0, 36);*/
-    
+    //[self.effect prepareToDraw];
+        
     // Render the object again with ES2
     glUseProgram(_program);
     
-    for(int i=0; i<50; i++){
+    float tempColour[4];
+    
+    for(int i=0; i<NUM_NODES; i++){
+        [_nodes[i] getColour:tempColour];
+        
         glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, nodeModelView[i].m);
         glUniformMatrix3fv(uniforms[UNIFORM_NORMAL_MATRIX], 1, 0, nodeNormal[i].m);
+        glUniform4f(uniforms[UNIFORM_COLOUR], tempColour[0], tempColour[1], tempColour[2], tempColour[3]);
         
         // draw each node
-        [nodes[i] draw:&_vertexArray withModelView:&nodeModelView[i] withNormal:&nodeNormal[i] withProgram:&_program];
+        //[_nodes[i] draw:&_vertexArray withIndices:_sphereIndexArray withModelView:&nodeModelView[i] withNormal:&nodeNormal[i] withProgram:&_program];
+        glDrawElements(GL_TRIANGLES, sizeof(_sphereIndexArray)/sizeof(_sphereIndexArray[0]), GL_UNSIGNED_INT, _sphereIndexArray);
+
     }
     
-    /*
+    [self.effect prepareToDraw];
+    
     glBindVertexArrayOES(_connectArray);
+    
     //glUseProgram(_program);
     
     //glUniformMatrix4fv(uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX], 1, 0, _modelViewProjectionMatrix.m);
     //glUniformMatrix3fv(uniforms[UNIFORM_NORMAL_MATRIX], 1, 0, _normalMatrix.m);
-    [self.effect prepareToDraw];
-    glDrawArrays(GL_LINES, 0, 2);*/
     
+    GLuint numIndices = sizeof(_lineIndexData)/sizeof(_lineIndexData[0]);
+    glDrawElements(GL_LINES, numIndices, GL_UNSIGNED_INT, _lineIndexData);
     
 }
+
+
 #pragma mark -  OpenGL ES 2 shader compilation
 
 - (BOOL)loadShaders
@@ -351,7 +505,6 @@
     // This needs to be done prior to linking.
     glBindAttribLocation(_program, GLKVertexAttribPosition, "position");
     glBindAttribLocation(_program, GLKVertexAttribNormal, "normal");
-    glBindAttribLocation(_program, GLKVertexAttribColor, "colour");
     
     // Link program.
     if (![self linkProgram:_program]) {
@@ -376,6 +529,56 @@
     // Get uniform locations.
     uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX] = glGetUniformLocation(_program, "modelViewProjectionMatrix");
     uniforms[UNIFORM_NORMAL_MATRIX] = glGetUniformLocation(_program, "normalMatrix");
+    uniforms[UNIFORM_COLOUR] = glGetUniformLocation(_program, "colour");
+    
+    /*
+    _program2 = glCreateProgram();
+    
+    // Create and compile vertex shader.
+    vertShaderPathname = [[NSBundle mainBundle] pathForResource:@"SelectedNodeShader" ofType:@"vsh"];
+    if (![self compileShader:&vertShader type:GL_VERTEX_SHADER file:vertShaderPathname]) {
+        NSLog(@"Failed to compile vertex shader");
+        return NO;
+    }
+    
+    // Create and compile fragment shader.
+    fragShaderPathname = [[NSBundle mainBundle] pathForResource:@"SelectedNodeShader" ofType:@"fsh"];
+    if (![self compileShader:&fragShader type:GL_FRAGMENT_SHADER file:fragShaderPathname]) {
+        NSLog(@"Failed to compile fragment shader");
+        return NO;
+    }
+    
+    glAttachShader(_program2, vertShader);
+    glAttachShader(_program2, fragShader);
+    
+    glBindAttribLocation(_program2, GLKVertexAttribPosition, "position");
+    glBindAttribLocation(_program2, GLKVertexAttribNormal, "normal");
+    
+    // Link program.
+    if (![self linkProgram:_program2]) {
+        NSLog(@"Failed to link program: %d", _program2);
+        
+        if (vertShader) {
+            glDeleteShader(vertShader);
+            vertShader = 0;
+        }
+        if (fragShader) {
+            glDeleteShader(fragShader);
+            fragShader = 0;
+        }
+        if (_program2) {
+            glDeleteProgram(_program2);
+            _program2 = 0;
+        }
+        
+        return NO;
+    }
+    
+    // Get uniform locations.
+    uniforms[UNIFORM_MODELVIEWPROJECTION_MATRIX] = glGetUniformLocation(_program2, "modelViewProjectionMatrix");
+    uniforms[UNIFORM_NORMAL_MATRIX] = glGetUniformLocation(_program2, "normalMatrix");
+    */
+    
     
     // Release vertex and fragment shaders.
     if (vertShader) {
@@ -386,6 +589,7 @@
         glDetachShader(_program, fragShader);
         glDeleteShader(fragShader);
     }
+    
     
     return YES;
 }

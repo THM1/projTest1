@@ -7,6 +7,8 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
+		776E46FA177B2E9000F0396B /* SelectedNodeShader.fsh in Sources */ = {isa = PBXBuildFile; fileRef = 776E46F9177B2E9000F0396B /* SelectedNodeShader.fsh */; };
+		776E46FC177B2EBB00F0396B /* SelectedNodeShader.vsh in Sources */ = {isa = PBXBuildFile; fileRef = 776E46FB177B2EBB00F0396B /* SelectedNodeShader.vsh */; };
 		77992FCD174BE8AD002C251E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 77992FCC174BE8AD002C251E /* UIKit.framework */; };
 		77992FCF174BE8AD002C251E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 77992FCE174BE8AD002C251E /* Foundation.framework */; };
 		77992FD1174BE8AD002C251E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 77992FD0174BE8AD002C251E /* CoreGraphics.framework */; };
@@ -29,6 +31,7 @@
 		77993006174BE8AE002C251E /* projTest1Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 77993005174BE8AE002C251E /* projTest1Tests.m */; };
 		77993013174BE90C002C251E /* Node.m in Sources */ = {isa = PBXBuildFile; fileRef = 77993012174BE90C002C251E /* Node.m */; };
 		77993014174EE891002C251E /* Node.m in Sources */ = {isa = PBXBuildFile; fileRef = 77993012174BE90C002C251E /* Node.m */; };
+		77EB130C176534F8008CB88E /* Sphere.m in Sources */ = {isa = PBXBuildFile; fileRef = 77EB130B176534F8008CB88E /* Sphere.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -42,6 +45,8 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
+		776E46F9177B2E9000F0396B /* SelectedNodeShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = SelectedNodeShader.fsh; sourceTree = "<group>"; };
+		776E46FB177B2EBB00F0396B /* SelectedNodeShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = SelectedNodeShader.vsh; sourceTree = "<group>"; };
 		77992FC9174BE8AD002C251E /* projTest1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = projTest1.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		77992FCC174BE8AD002C251E /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		77992FCE174BE8AD002C251E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -69,9 +74,11 @@
 		77993004174BE8AE002C251E /* projTest1Tests.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = projTest1Tests.h; sourceTree = "<group>"; };
 		77993005174BE8AE002C251E /* projTest1Tests.m */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.objc; path = projTest1Tests.m; sourceTree = "<group>"; };
 		7799300F174BE90C002C251E /* Graphics.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Graphics.h; sourceTree = "<group>"; };
-		77993010174BE90C002C251E /* _Point.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = _Point.h; sourceTree = "<group>"; };
+		77993010174BE90C002C251E /* Point.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Point.h; sourceTree = "<group>"; };
 		77993011174BE90C002C251E /* Node.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Node.h; sourceTree = "<group>"; };
 		77993012174BE90C002C251E /* Node.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Node.m; sourceTree = "<group>"; };
+		77EB130A176534F8008CB88E /* Sphere.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Sphere.h; sourceTree = "<group>"; };
+		77EB130B176534F8008CB88E /* Sphere.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Sphere.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -140,6 +147,8 @@
 				77992FE8174BE8AD002C251E /* MainStoryboard.storyboard */,
 				77992FEB174BE8AD002C251E /* Shader.fsh */,
 				77992FED174BE8AD002C251E /* Shader.vsh */,
+				776E46F9177B2E9000F0396B /* SelectedNodeShader.fsh */,
+				776E46FB177B2EBB00F0396B /* SelectedNodeShader.vsh */,
 				77992FEF174BE8AD002C251E /* ViewController.h */,
 				77992FF0174BE8AD002C251E /* ViewController.m */,
 				77992FD7174BE8AD002C251E /* Supporting Files */,
@@ -151,9 +160,11 @@
 			isa = PBXGroup;
 			children = (
 				7799300F174BE90C002C251E /* Graphics.h */,
-				77993010174BE90C002C251E /* _Point.h */,
+				77993010174BE90C002C251E /* Point.h */,
 				77993011174BE90C002C251E /* Node.h */,
 				77993012174BE90C002C251E /* Node.m */,
+				77EB130A176534F8008CB88E /* Sphere.h */,
+				77EB130B176534F8008CB88E /* Sphere.m */,
 				77992FD8174BE8AD002C251E /* projTest1-Info.plist */,
 				77992FD9174BE8AD002C251E /* InfoPlist.strings */,
 				77992FDC174BE8AD002C251E /* main.m */,
@@ -300,6 +311,9 @@
 				77992FDD174BE8AD002C251E /* main.m in Sources */,
 				77992FE1174BE8AD002C251E /* AppDelegate.m in Sources */,
 				77992FF1174BE8AD002C251E /* ViewController.m in Sources */,
+				77EB130C176534F8008CB88E /* Sphere.m in Sources */,
+				776E46FA177B2E9000F0396B /* SelectedNodeShader.fsh in Sources */,
+				776E46FC177B2EBB00F0396B /* SelectedNodeShader.vsh in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};

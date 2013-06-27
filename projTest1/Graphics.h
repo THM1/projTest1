@@ -14,16 +14,16 @@
 
 @protocol Graphics <NSObject>
 
--(void) draw: (GLuint *)_vertexArray withModelView:(GLKMatrix4 *)_modelView withNormal:(GLKMatrix3 *)_normal withProgram:(GLuint *)_program;
--(void) drawLinks: (GLuint *) _linkArray;
+-(void) draw: (GLuint *)vertexArray withIndices: (GLuint *)indexArray withModelView:(GLKMatrix4 *)modelView withNormal:(GLKMatrix3 *)normal withProgram:(GLuint *)program;
+-(void) drawLinks: (GLuint *) linkArray;
 -(void) redraw;
 -(void) deleteObj;
 -(void) selectObj;
 -(void) setColour: (float *) colour;
 -(void) setSize: (float) size;
 -(void) getColour: (float*) col;
--(void) calculateModelView:(GLKMatrix4 *)_modelView andNormal:(GLKMatrix3 *)_normal withBase:(GLKMatrix4 *)baseModelView andProjection:(GLKMatrix4 *)projection andRotation:(float *)rotation;
-
+-(void) calculateModelView:(GLKMatrix4 *)modelView andNormal:(GLKMatrix3 *)normal withBase:(GLKMatrix4 *)baseModelView andProjection:(GLKMatrix4 *)projection andRotation:(float *)rotation andTranslation: (float *)translation;
+//-(void) detectSelected:(CGPoint)touchLocation withZ:(float)zVal andAngle:(float)theta;
 -(float) getSize;
 
 @end
