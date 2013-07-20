@@ -7,8 +7,9 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		776E46FA177B2E9000F0396B /* SelectedNodeShader.fsh in Sources */ = {isa = PBXBuildFile; fileRef = 776E46F9177B2E9000F0396B /* SelectedNodeShader.fsh */; };
-		776E46FC177B2EBB00F0396B /* SelectedNodeShader.vsh in Sources */ = {isa = PBXBuildFile; fileRef = 776E46FB177B2EBB00F0396B /* SelectedNodeShader.vsh */; };
+		7716C3E4178D9F190061FE9D /* GeneRegulationMap.m in Sources */ = {isa = PBXBuildFile; fileRef = 7716C3E3178D9F190061FE9D /* GeneRegulationMap.m */; };
+		7797868A1790D31A003F0900 /* Link.m in Sources */ = {isa = PBXBuildFile; fileRef = 779786891790D31A003F0900 /* Link.m */; };
+		7797868D1790D36D003F0900 /* Stage.m in Sources */ = {isa = PBXBuildFile; fileRef = 7797868C1790D36D003F0900 /* Stage.m */; };
 		77992FCD174BE8AD002C251E /* UIKit.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 77992FCC174BE8AD002C251E /* UIKit.framework */; };
 		77992FCF174BE8AD002C251E /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 77992FCE174BE8AD002C251E /* Foundation.framework */; };
 		77992FD1174BE8AD002C251E /* CoreGraphics.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 77992FD0174BE8AD002C251E /* CoreGraphics.framework */; };
@@ -32,6 +33,8 @@
 		77993013174BE90C002C251E /* Node.m in Sources */ = {isa = PBXBuildFile; fileRef = 77993012174BE90C002C251E /* Node.m */; };
 		77993014174EE891002C251E /* Node.m in Sources */ = {isa = PBXBuildFile; fileRef = 77993012174BE90C002C251E /* Node.m */; };
 		77EB130C176534F8008CB88E /* Sphere.m in Sources */ = {isa = PBXBuildFile; fileRef = 77EB130B176534F8008CB88E /* Sphere.m */; };
+		77F80706178CD83300BA612C /* FactorFamily.m in Sources */ = {isa = PBXBuildFile; fileRef = 77F80705178CD83300BA612C /* FactorFamily.m */; };
+		77F80709178CD9EE00BA612C /* FactorAtStage.m in Sources */ = {isa = PBXBuildFile; fileRef = 77F80708178CD9EE00BA612C /* FactorAtStage.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -45,8 +48,12 @@
 /* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
-		776E46F9177B2E9000F0396B /* SelectedNodeShader.fsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = SelectedNodeShader.fsh; sourceTree = "<group>"; };
-		776E46FB177B2EBB00F0396B /* SelectedNodeShader.vsh */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.glsl; path = SelectedNodeShader.vsh; sourceTree = "<group>"; };
+		7716C3E2178D9F190061FE9D /* GeneRegulationMap.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = GeneRegulationMap.h; sourceTree = "<group>"; };
+		7716C3E3178D9F190061FE9D /* GeneRegulationMap.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = GeneRegulationMap.m; sourceTree = "<group>"; };
+		779786881790D31A003F0900 /* Link.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Link.h; sourceTree = "<group>"; };
+		779786891790D31A003F0900 /* Link.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Link.m; sourceTree = "<group>"; };
+		7797868B1790D36D003F0900 /* Stage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Stage.h; sourceTree = "<group>"; };
+		7797868C1790D36D003F0900 /* Stage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Stage.m; sourceTree = "<group>"; };
 		77992FC9174BE8AD002C251E /* projTest1.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = projTest1.app; sourceTree = BUILT_PRODUCTS_DIR; };
 		77992FCC174BE8AD002C251E /* UIKit.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = UIKit.framework; path = System/Library/Frameworks/UIKit.framework; sourceTree = SDKROOT; };
 		77992FCE174BE8AD002C251E /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = System/Library/Frameworks/Foundation.framework; sourceTree = SDKROOT; };
@@ -79,6 +86,10 @@
 		77993012174BE90C002C251E /* Node.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Node.m; sourceTree = "<group>"; };
 		77EB130A176534F8008CB88E /* Sphere.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Sphere.h; sourceTree = "<group>"; };
 		77EB130B176534F8008CB88E /* Sphere.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Sphere.m; sourceTree = "<group>"; };
+		77F80704178CD83300BA612C /* FactorFamily.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FactorFamily.h; sourceTree = "<group>"; };
+		77F80705178CD83300BA612C /* FactorFamily.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FactorFamily.m; sourceTree = "<group>"; };
+		77F80707178CD9EE00BA612C /* FactorAtStage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FactorAtStage.h; sourceTree = "<group>"; };
+		77F80708178CD9EE00BA612C /* FactorAtStage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FactorAtStage.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -147,8 +158,6 @@
 				77992FE8174BE8AD002C251E /* MainStoryboard.storyboard */,
 				77992FEB174BE8AD002C251E /* Shader.fsh */,
 				77992FED174BE8AD002C251E /* Shader.vsh */,
-				776E46F9177B2E9000F0396B /* SelectedNodeShader.fsh */,
-				776E46FB177B2EBB00F0396B /* SelectedNodeShader.vsh */,
 				77992FEF174BE8AD002C251E /* ViewController.h */,
 				77992FF0174BE8AD002C251E /* ViewController.m */,
 				77992FD7174BE8AD002C251E /* Supporting Files */,
@@ -163,6 +172,16 @@
 				77993010174BE90C002C251E /* Point.h */,
 				77993011174BE90C002C251E /* Node.h */,
 				77993012174BE90C002C251E /* Node.m */,
+				7716C3E2178D9F190061FE9D /* GeneRegulationMap.h */,
+				7716C3E3178D9F190061FE9D /* GeneRegulationMap.m */,
+				779786881790D31A003F0900 /* Link.h */,
+				779786891790D31A003F0900 /* Link.m */,
+				7797868B1790D36D003F0900 /* Stage.h */,
+				7797868C1790D36D003F0900 /* Stage.m */,
+				77F80704178CD83300BA612C /* FactorFamily.h */,
+				77F80705178CD83300BA612C /* FactorFamily.m */,
+				77F80707178CD9EE00BA612C /* FactorAtStage.h */,
+				77F80708178CD9EE00BA612C /* FactorAtStage.m */,
 				77EB130A176534F8008CB88E /* Sphere.h */,
 				77EB130B176534F8008CB88E /* Sphere.m */,
 				77992FD8174BE8AD002C251E /* projTest1-Info.plist */,
@@ -312,8 +331,11 @@
 				77992FE1174BE8AD002C251E /* AppDelegate.m in Sources */,
 				77992FF1174BE8AD002C251E /* ViewController.m in Sources */,
 				77EB130C176534F8008CB88E /* Sphere.m in Sources */,
-				776E46FA177B2E9000F0396B /* SelectedNodeShader.fsh in Sources */,
-				776E46FC177B2EBB00F0396B /* SelectedNodeShader.vsh in Sources */,
+				77F80706178CD83300BA612C /* FactorFamily.m in Sources */,
+				77F80709178CD9EE00BA612C /* FactorAtStage.m in Sources */,
+				7716C3E4178D9F190061FE9D /* GeneRegulationMap.m in Sources */,
+				7797868A1790D31A003F0900 /* Link.m in Sources */,
+				7797868D1790D36D003F0900 /* Stage.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -376,7 +398,8 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				COPY_PHASE_STRIP = NO;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
@@ -408,7 +431,8 @@
 				CLANG_WARN_ENUM_CONVERSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;

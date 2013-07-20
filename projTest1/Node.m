@@ -105,9 +105,9 @@
     float transformedPoint[3];
     
     // obtain position of point after translation
-    transformedPoint[0] = _point[0] + translation[0];
-    transformedPoint[1] = _point[1] + translation[1];
-    transformedPoint[2] = _point[2] + translation[2];
+    transformedPoint[0] = _point[0];// + translation[0];
+    transformedPoint[1] = _point[1];// + translation[1];
+    transformedPoint[2] = _point[2];// + translation[2];
     
     
     // first recalculate x and z positions when rotating around y axis (trigonometry)

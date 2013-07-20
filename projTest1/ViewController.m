@@ -33,6 +33,8 @@
     
     GLuint _vertexArray, _connectArray;
     GLuint _vertexBuffer, _connectBuffer;
+    
+    //UILabel* label;
 }
 @property (strong, nonatomic) EAGLContext *context;
 @property (strong, nonatomic) GLKBaseEffect *effect;
@@ -367,6 +369,12 @@
     //glEnableVertexAttribArray(GLKVertexAttribNormal);
     //glVertexAttribPointer(GLKVertexAttribNormal, 3, GL_FLOAT, GL_FALSE, 24, BUFFER_OFFSET(12));
     */
+    
+    UILabel* label = [[UILabel alloc] initWithFrame:CGRectMake(50, 50, 100, 44)];
+    label.backgroundColor = [UIColor blueColor];
+    label.textColor = [UIColor colorWithRed:0.0f green:1.0f blue:0.4f alpha:1.0f];
+    [self.view addSubview:label];
+    label.text = @"Hello World";
 }
 
 - (void)tearDownGL

@@ -11,7 +11,7 @@
 #import "Node.h"
 #import "Sphere.h"
 
-#define NUM_NODES 5
+#define NUM_NODES 25
 
 #define SPHERE_ROWS 16
 #define SPHERE_POINTS_PER_ROW 16
@@ -97,6 +97,9 @@ float _translate[9] = {1.0f, 1.0f, 1.0f, 2.0f, 2.0f, 2.0f, 3.0f, 0.0f, 0.0f};
     
     sphereVertex _sphereVertexArray[(SPHERE_ROWS-2) * (SPHERE_POINTS_PER_ROW) + 2];
     GLuint _sphereIndexArray[(SPHERE_ROWS-2) * (SPHERE_POINTS_PER_ROW) * 6];
+    
+    UILabel *nodeName;
+    UILabel *nodeConnectedTo;
 }
 
 @end
