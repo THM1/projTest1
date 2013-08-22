@@ -32,6 +32,11 @@
 		77993006174BE8AE002C251E /* projTest1Tests.m in Sources */ = {isa = PBXBuildFile; fileRef = 77993005174BE8AE002C251E /* projTest1Tests.m */; };
 		77993013174BE90C002C251E /* Node.m in Sources */ = {isa = PBXBuildFile; fileRef = 77993012174BE90C002C251E /* Node.m */; };
 		77993014174EE891002C251E /* Node.m in Sources */ = {isa = PBXBuildFile; fileRef = 77993012174BE90C002C251E /* Node.m */; };
+		77BE918117A343C500EE2885 /* test2.dot in Resources */ = {isa = PBXBuildFile; fileRef = 77BE917D17A343C500EE2885 /* test2.dot */; };
+		77BE918217A343C500EE2885 /* factor_graph.plain in Resources */ = {isa = PBXBuildFile; fileRef = 77BE917E17A343C500EE2885 /* factor_graph.plain */; };
+		77BE918317A343C500EE2885 /* regulation_graph.plain in Resources */ = {isa = PBXBuildFile; fileRef = 77BE917F17A343C500EE2885 /* regulation_graph.plain */; };
+		77BE918417A343C500EE2885 /* test.dot in Resources */ = {isa = PBXBuildFile; fileRef = 77BE918017A343C500EE2885 /* test.dot */; };
+		77BE918617A402C500EE2885 /* factor_info.txt in Resources */ = {isa = PBXBuildFile; fileRef = 77BE918517A402C500EE2885 /* factor_info.txt */; };
 		77EB130C176534F8008CB88E /* Sphere.m in Sources */ = {isa = PBXBuildFile; fileRef = 77EB130B176534F8008CB88E /* Sphere.m */; };
 		77F80706178CD83300BA612C /* FactorFamily.m in Sources */ = {isa = PBXBuildFile; fileRef = 77F80705178CD83300BA612C /* FactorFamily.m */; };
 		77F80709178CD9EE00BA612C /* FactorAtStage.m in Sources */ = {isa = PBXBuildFile; fileRef = 77F80708178CD9EE00BA612C /* FactorAtStage.m */; };
@@ -84,6 +89,11 @@
 		77993010174BE90C002C251E /* Point.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Point.h; sourceTree = "<group>"; };
 		77993011174BE90C002C251E /* Node.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Node.h; sourceTree = "<group>"; };
 		77993012174BE90C002C251E /* Node.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Node.m; sourceTree = "<group>"; };
+		77BE917D17A343C500EE2885 /* test2.dot */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = test2.dot; sourceTree = "<group>"; };
+		77BE917E17A343C500EE2885 /* factor_graph.plain */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = factor_graph.plain; sourceTree = "<group>"; };
+		77BE917F17A343C500EE2885 /* regulation_graph.plain */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = regulation_graph.plain; sourceTree = "<group>"; };
+		77BE918017A343C500EE2885 /* test.dot */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = test.dot; sourceTree = "<group>"; };
+		77BE918517A402C500EE2885 /* factor_info.txt */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = factor_info.txt; sourceTree = "<group>"; };
 		77EB130A176534F8008CB88E /* Sphere.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = Sphere.h; sourceTree = "<group>"; };
 		77EB130B176534F8008CB88E /* Sphere.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Sphere.m; sourceTree = "<group>"; };
 		77F80704178CD83300BA612C /* FactorFamily.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FactorFamily.h; sourceTree = "<group>"; };
@@ -168,6 +178,11 @@
 		77992FD7174BE8AD002C251E /* Supporting Files */ = {
 			isa = PBXGroup;
 			children = (
+				77BE917F17A343C500EE2885 /* regulation_graph.plain */,
+				77BE918517A402C500EE2885 /* factor_info.txt */,
+				77BE917E17A343C500EE2885 /* factor_graph.plain */,
+				77BE917D17A343C500EE2885 /* test2.dot */,
+				77BE918017A343C500EE2885 /* test.dot */,
 				7799300F174BE90C002C251E /* Graphics.h */,
 				77993010174BE90C002C251E /* Point.h */,
 				77993011174BE90C002C251E /* Node.h */,
@@ -292,6 +307,11 @@
 				77992FEA174BE8AD002C251E /* MainStoryboard.storyboard in Resources */,
 				77992FEC174BE8AD002C251E /* Shader.fsh in Resources */,
 				77992FEE174BE8AD002C251E /* Shader.vsh in Resources */,
+				77BE918117A343C500EE2885 /* test2.dot in Resources */,
+				77BE918217A343C500EE2885 /* factor_graph.plain in Resources */,
+				77BE918317A343C500EE2885 /* regulation_graph.plain in Resources */,
+				77BE918417A343C500EE2885 /* test.dot in Resources */,
+				77BE918617A402C500EE2885 /* factor_info.txt in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -432,7 +452,7 @@
 				CLANG_WARN_INT_CONVERSION = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				CODE_SIGN_IDENTITY = "";
-				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=*]" = "";
 				COPY_PHASE_STRIP = YES;
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_WARN_ABOUT_RETURN_TYPE = YES;

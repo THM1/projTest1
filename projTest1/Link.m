@@ -6,9 +6,121 @@
 //  Copyright (c) 2013 THM. All rights reserved.
 //
 
+#define MAX_X 700
+#define MAX_Y 800
+
 #import "Link.h"
 
+// class variable
+static NSMutableDictionary *_factorFamilies;
+
 @implementation Link
+
+-(Link *) initWithPrev:(Stage *)prev andNext:(Stage *)next
+{
+    self = [super init];
+    
+    if(self){
+        
+        [self initialiseVariables];
+        
+        // if first link created, load info for class variable
+        if(![_factorFamilies count]) [self loadFactorFamilyData];
+        
+        [self setPreviousStage:prev];
+        [self setNextStage:next];
+        
+        //[self calculatePos];
+        [self loadFactorData];
+        [self loadFactorLabels];
+        
+    }
+    
+    return self;
+}
+
+-(void)initialiseVariables
+{
+    if(_factorFamilies == nil){
+        _factorFamilies = [[NSMutableDictionary alloc] init];
+    }
+    
+    _upFactorsData = [[NSMutableDictionary alloc] init];
+    _downFactorsData = [[NSMutableDictionary alloc] init];
+    _allFactorsData = [[NSMutableDictionary alloc] init];
+
+}
+
+-(void)loadFactorFamilyData
+{
+    // open file with factor family map details (nodes and edges)
+    NSError *error = nil;
+    NSStringEncoding *encoding = nil;
+    NSString *filePathName = [[NSBundle mainBundle]pathForResource: @"factor_graph" ofType:@"plain"];
+    NSString *factorFamilyInfo = [[NSString alloc] initWithContentsOfFile:filePathName usedEncoding:encoding error:&error];
+    
+    // place all words in an ordered list in an array (words are distinguished as being separated by white space characters or new line characters)
+    NSArray *factorInfoWordByWord = [factorFamilyInfo componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    
+    // counter for words in array
+    unsigned int i=0;
+    
+    // check start of file is correct - should be the word "graph"
+    if(![factorInfoWordByWord[i++] isEqual: @"graph"]){
+        // incorrect file opened
+        NSLog(@"Incorrect File Type. Could not load gene regulation map");
+        exit(1);
+    }
+    
+    // scan next parts of the file for the width and height of the image and calculate scale factor
+    // between position in image and position on screen
+    i++;
+    NSString *nextWord =  [factorInfoWordByWord objectAtIndexedSubscript:i];
+    float width = [nextWord floatValue];
+    
+    i++;
+    nextWord = [factorInfoWordByWord objectAtIndexedSubscript:i];
+    float height = [nextWord floatValue];
+    
+    // scale to screen size
+    float positionScale[2];
+    positionScale[0]= 100.0f/width;
+    positionScale[1] = 100.0f/height;
+    
+    // next line of file
+    i++;
+    
+    while(i < [factorInfoWordByWord count]){
+        nextWord = [factorInfoWordByWord objectAtIndexedSubscript:i++];
+        
+        // if end of file leave while loop
+        if([nextWord isEqualToString:@"stop"]) break;
+        if([nextWord isEqualToString:@"edge"]) break;
+        
+        if([nextWord isEqualToString:@"node"]){
+            NSString *factorName = [factorInfoWordByWord objectAtIndexedSubscript:i++];
+            
+            float pos[3];
+            pos[0] = [[factorInfoWordByWord objectAtIndexedSubscript:i++] floatValue] * positionScale[0];
+            pos[1] = [[factorInfoWordByWord objectAtIndexedSubscript:i++] floatValue] * positionScale[1];
+            pos[2] = 0;
+            
+            FactorFamily *newFactorFamily = [[FactorFamily alloc] initFactorFamilyName:factorName withInfo:@"" andMoreInfo:@"" andPos:pos];
+            
+            [_factorFamilies setObject:newFactorFamily forKey:factorName];
+        
+            i+=7;
+        }
+
+    }
+
+}
+
+
+-(void)calculatePos
+{
+    
+}
 
 -(Link *) initWithPrev:(Stage *)prev andNext:(Stage *)next andKeys:(NSArray *)keys andPValues:(NSArray *)pVals andOddsRatios:(NSArray *)oddsRatios
 {
@@ -93,7 +205,7 @@
 
 -(void)setFactorAtStageWithKey:(NSString *)key andNewFactor:(NSObject *)factorAtStage
 {
-    [_factorsAtStage setObject:factorAtStage forKey:key];
+    [_factorsAtLink setObject:factorAtStage forKey:key];
 }
 
 
@@ -111,7 +223,7 @@
 
 -(NSObject *)getFactorAtStageWithKey:(NSString *)key
 {
-    NSObject *result = [_factorsAtStage objectForKey:key];
+    NSObject *result = [_factorsAtLink  objectForKey:key];
     return result;
 }
 
@@ -122,5 +234,319 @@
     }
 }
 
+-(void) loadFactorData
+{
+    // open file with factor details at each edge
+    NSError *error = nil;
+    NSStringEncoding *encoding = NULL;
+    NSString *filePathName = [[NSBundle mainBundle] pathForResource:@"factor_info" ofType:@"txt"];
+    NSString *factorInfo = [[NSString alloc] initWithContentsOfFile:filePathName usedEncoding:encoding error:&error];
+    
+    // place all words in an ordered list in an array (words are distinguished as being separated by white space characters or new line characters)
+    NSArray *factorInfoWordByWord = [factorInfo componentsSeparatedByCharactersInSet:[NSCharacterSet whitespaceAndNewlineCharacterSet]];
+    
+    // counter for words in array
+    unsigned int i=0;
+    
+    // check start of file is correct - should be the word "graph"
+    if(![factorInfoWordByWord[i] isEqual: @"Fr.C'"]){
+        // incorrect file opened
+        NSLog(@"Incorrect File Type. Could not load factor info");
+        exit(1);
+    }
+    
+    NSString *prevStageName = [_prev getName];
+    NSString *nextStageName = [_next getName];
+
+    while(i<[factorInfoWordByWord count]){
+        
+        // get name of previous stage and check it matches the one for this link
+        NSString *nextWord = [factorInfoWordByWord objectAtIndexedSubscript:i++];
+        if(![nextWord isEqualToString:prevStageName]){
+            i+=5;
+            continue;
+        }
+    
+        // get name of next stage and check it matches the one for this link
+        nextWord = [factorInfoWordByWord objectAtIndexedSubscript:i++];
+        if(![nextWord isEqualToString:nextStageName]){
+            i+=4;
+            continue;
+        }
+        
+        // if prev and next stages match, get the type of regulation (up/down/all)
+        nextWord = [factorInfoWordByWord objectAtIndexedSubscript:i++];
+        
+        // get the factor family name
+        NSString *factorFamilyName = [factorInfoWordByWord objectAtIndexedSubscript:i++];
+        
+        // get the odds ratio and pval for this factor
+        float oddsRatio = [[factorInfoWordByWord objectAtIndexedSubscript:i++] floatValue];
+        float pVal = [[factorInfoWordByWord objectAtIndexedSubscript:i++] floatValue];
+        
+        // check if the factor family already exists
+        // if it does not create a factor family with the obtained factor family name
+        if([_factorFamilies objectForKey:factorFamilyName] == nil){
+            float pos[3];
+            
+            FactorFamily* newFamily = [[FactorFamily alloc] initFactorFamilyName:factorFamilyName withInfo:@"" andMoreInfo:@"" andPos:pos];
+            [_factorFamilies setObject:newFamily forKey:factorFamilyName];
+        }
+        
+        // create the factor object which has the details of the p value and odds ratio for the above factor family
+        FactorAtStage* newFactor = [[FactorAtStage alloc] initWithFactorFamily:[_factorFamilies objectForKey:factorFamilyName] andPValue:&pVal andOddsRatio:&oddsRatio];
+        
+        // add it to the correct map list - either the up regulated, down regulated, or all regulated map list
+        if([nextWord isEqualToString:@"up"]){
+            [_upFactorsData setObject:newFactor forKey:factorFamilyName];
+        }
+        
+        else if([nextWord isEqualToString:@"down"]){
+            [_downFactorsData setObject:newFactor forKey:factorFamilyName];
+        }
+        
+        else if([nextWord isEqualToString:@"all"]){
+            [_allFactorsData setObject:newFactor forKey:factorFamilyName];
+        }
+        
+        // if up/down/all is not specified then exit program as incorrect file type specified
+        else{
+            NSLog(@"Incorrect data format supplied. Cannot continue");
+            exit(1);
+        }
+    }
+    
+}
+
+
+//-(UIBezierPath *)getArrow
+
+-(UIImageView *)getArrow:(UIView *)view
+{
+    UIBezierPath* arrowPath = [[UIBezierPath alloc] init];
+    
+    CGPoint first = [_prev getCGPoint];
+    CGPoint last = [_next getCGPoint];
+    
+    GLKVector2 directionVector;
+    
+    directionVector.x = first.x + 0.9 * (last.x - first.x);
+    directionVector.y = first.y - 0.9 * (last.y - first.y);
+    
+    //directionVector = GLKVector2Normalize(directionVector);
+    
+    CGPoint second = CGPointMake(directionVector.x, directionVector.y * sinf(0.7));
+    CGPoint third = CGPointMake(directionVector.x * cosf(0.7), directionVector.y);
+    
+    // create bezier path of arrow using above points
+    [arrowPath moveToPoint:first];
+    [arrowPath addLineToPoint:last];
+    [arrowPath addLineToPoint:second];
+    [arrowPath addLineToPoint:third];
+    [arrowPath addLineToPoint:last];
+    [arrowPath closePath];
+    
+    [arrowPath setLineWidth:2.0f];
+    //[[UIColor redColor] setStroke];
+    
+    // create the UIImage to put the UIBezierPath in
+    //UIImage *image = [[UIImage alloc] init];
+    
+    float imageSize[2];
+    imageSize[0] = abs(first.x - last.x);
+    imageSize[1] = abs(first.y - last.y);
+    
+    // create image context
+    UIGraphicsBeginImageContext(view.bounds.size);
+    
+    CGContextRef context = UIGraphicsGetCurrentContext();
+    
+    UIGraphicsPushContext(context);
+    
+    // add attributes to the image to be draw (e.g. colour)
+    CGContextSetStrokeColorWithColor(context, [UIColor redColor].CGColor);
+    
+    [arrowPath stroke];
+    //[arrowPath fill];
+    
+    UIGraphicsPopContext();
+    
+    // get the image on the current context
+    UIImage *outputImage = UIGraphicsGetImageFromCurrentImageContext();
+    
+    // end image creation
+    UIGraphicsEndImageContext();
+    
+    // create image view initialised with the arrow image
+    UIImageView *imageView = [[UIImageView alloc] initWithImage:outputImage];
+    
+    
+    //return arrowPath;
+    return imageView;
+}
+
+
+/**
+ * Function that checks if the touch position corresponds
+ * to the link position, and modifies the touch flag accordingly
+ 
+ * Has an error of +/- 50 on touch position
+ 
+ * Returns a boolean value: true if touched, false otherwise
+ */
+-(BOOL)checkTouched:(CGPoint)touchPos
+{
+    CGPoint prev = [_prev getCGPoint];
+    CGPoint next = [_next getCGPoint];
+    
+    // find arrow position and compare with touch location
+    float maxX = (prev.x > next.x)? prev.x : next.x;
+    float maxY = (prev.y > next.y)? prev.y : next.y;
+    float minX = (prev.x < next.x)? prev.x : next.x;
+    float minY = (prev.y < next.y)? prev.y : next.y;
+
+    // check if touch location is on arrow - error of +/- 50
+    if(touchPos.x > (maxX + 50.0f)) return false;
+    if(touchPos.x < (minX - 50.0f)) return false;
+    if(touchPos.y > (maxY + 50.0f)) return false;
+    if(touchPos.y < (minY - 50.0f)) return false;
+    
+    // toggle touch flag
+    _touchFlag = !_touchFlag;
+
+    //NSLog(@"TOUCHED");
+    return true;
+
+}
+
+
+/**
+ * helper function for displaying the factors at this link
+ */
+-(void)displayFactorsHelper:(UIView *)view
+{
+    NSUInteger factorCount = _upFactorsLabels.count;
+
+    // loop through array of factors and display them to the view
+    for(int i=0; i<factorCount; i++){
+        //UILabel *tempLabel = [_upFactorsLabels objectAtIndexedSubscript:i];
+        //[view addSubview:tempLabel];
+        [view addSubview:[_upFactorsLabels objectAtIndexedSubscript:i]];
+        
+    }
+}
+
+/**
+ * helper function for hiding the factors at this link
+ */
+-(void)hideFactorsHelper:(UIView *)view
+{
+    int factorCount = _upFactorsLabels.count;
+
+    // loop through array of factors and remove them from the current view
+    for(int i=0; i<factorCount; i++){
+        
+        // get index of the UILabels in the subview array
+        NSUInteger x = [view.subviews indexOfObject:[_upFactorsLabels objectAtIndexedSubscript:i]];
+        
+        // if the label is not a subview of the view then return
+        if(x == NSNotFound) return;
+        
+        // otherwise find that label and remove it from the main view
+        [[view.subviews objectAtIndex:x] removeFromSuperview];
+    }
+    
+    return;
+}
+
+/**
+ * function that displays or hides factors from the screen
+ * using helper functions
+ * depending on the touch flag being toggled
+ */
+-(void)displayFactors:(UIView *)view
+{
+    
+    static BOOL prevTouchFlag = false;
+    
+    // check if touch flag has been toggled
+    
+    // if toggled to true then display factors using helper function
+    if(prevTouchFlag != _touchFlag && prevTouchFlag == false) [self displayFactorsHelper:view];
+    
+    // if toggled to false then hide factors using helper function
+    else if(prevTouchFlag != _touchFlag && prevTouchFlag == true) [self hideFactorsHelper:view];
+    
+    // set static touch flag to current touch flag
+    prevTouchFlag = _touchFlag;
+}
+
+
+/** 
+ * helper function for creating the factor labels for a given
+ * array of factor data 
+ */
+-(NSArray *)loadFactorLabelsForArray:(NSArray *)array
+{
+    // create array for the labels to be stored
+    NSMutableArray *labelArray = [[NSMutableArray alloc] init];
+    
+    // get count of number of labels to be created
+    NSUInteger count = array.count;
+    
+    // location of the next label is required for relative positioning of the labels
+    CGPoint next = [_next getCGPoint];
+    
+    for(int i=0; i<count; i++){
+        
+        FactorAtStage *tempFactor = [array objectAtIndexedSubscript:i];
+        float tempPos[3];
+        [tempFactor getRelativePos:tempPos];
+        
+        // adjust relative position to actual position using the position of the next stage
+        if(next.x >= MAX_X/2) tempPos[0] = tempPos[0] + next.x;
+        else tempPos[0] = next.x - tempPos[0];
+        
+        tempPos[1] = tempPos[1] + next.y - 100;
+        
+        CGRect factorRect = CGRectMake(tempPos[0], tempPos[1], 50, 20);
+        UILabel *label = [[UILabel alloc] initWithFrame:factorRect];
+        
+        label.text = [tempFactor getName];
+        label.textColor = [tempFactor getColour];
+        label.textAlignment = NSTextAlignmentCenter;
+        label.font = [UIFont systemFontOfSize:(int)[tempFactor getFontSize]];
+        
+        [labelArray addObject:label];
+    }
+    
+    return labelArray;
+}
+
+/**
+ * function that creates the UILabels for all the factors
+ * at this link using a helper function
+ */
+-(void)loadFactorLabels
+{
+    _upFactorsLabels = [[NSMutableArray alloc] init];
+    _downFactorsLabels = [[NSMutableArray alloc] init];
+    _allFactorsLabels = [[NSMutableArray alloc] init];
+    
+    [_upFactorsLabels addObjectsFromArray:[self loadFactorLabelsForArray:[_upFactorsData allValues]]];
+    [_downFactorsLabels addObjectsFromArray:[self loadFactorLabelsForArray:[_downFactorsData allValues]]];
+    [_allFactorsLabels addObjectsFromArray:[self loadFactorLabelsForArray:[_allFactorsData allValues]]];
+
+}
 
 @end
+
+
+
+
+
+
+
+
+
+

@@ -50,20 +50,49 @@
 }
 
 
--(float *) getFontSizeForOddsRatio:(float *)oddsRatio
+-(float) getFontSizeForOddsRatio:(float *)oddsRatio
 {
-    float *fontsize = NULL;
+    float fontsize = 8.0f;
     
-    if(*oddsRatio > 4.0f) *fontsize = 15.0f;
-    else if(*oddsRatio > 3.5f) *fontsize = 14.0f;
-    else if(*oddsRatio > 3.0f) *fontsize = 13.0f;
-    else if(*oddsRatio > 2.5f) *fontsize = 12.0f;
-    else if(*oddsRatio > 2.0f) *fontsize = 11.0f;
-    else if(*oddsRatio > 1.5f) *fontsize = 10.0f;
-    else if(*oddsRatio > 1.1f) *fontsize = 9.0f;
-    else *fontsize = 8.0f;
+    if(*oddsRatio > 4.0f) fontsize = 15.0f;
+    else if(*oddsRatio > 3.5f) fontsize = 14.0f;
+    else if(*oddsRatio > 3.0f) fontsize = 13.0f;
+    else if(*oddsRatio > 2.5f) fontsize = 12.0f;
+    else if(*oddsRatio > 2.0f) fontsize = 11.0f;
+    else if(*oddsRatio > 1.5f) fontsize = 10.0f;
+    else if(*oddsRatio > 1.1f) fontsize = 9.0f;
 
     return fontsize;
 }
 
+-(UIColor *)getColour
+{
+    UIColor *colour = [[UIColor alloc] init];
+    colour = [self getColourForPValue:&(_pValue)];
+    return colour;
+}
+-(float)getFontSize
+{
+    return [self getFontSizeForOddsRatio:&_oddsRatio];
+}
+
+-(UILabel *)getLabel
+{
+    UILabel *label = [[UILabel alloc] init];
+    
+    return label;
+}
+
 @end
+
+
+
+
+
+
+
+
+
+
+
+

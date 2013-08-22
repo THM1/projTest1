@@ -13,9 +13,11 @@
     NSString *_name;
     NSString *_basicInfo;
     NSString *_evenMoreInfo;
+    
+    float _relativePos[3];
 }
 
--(FactorFamily *)initFactorFamilyName:(NSString *)name withInfo:(NSString *)info andMoreInfo:(NSString *)moreInfo;
+-(FactorFamily *)initFactorFamilyName:(NSString *)name withInfo:(NSString *)info andMoreInfo:(NSString *)moreInfo andPos:(float *)pos;
 -(FactorFamily *)initWithFactorFamily:(FactorFamily *)factorFamily;
 
 //-(void) setName:(NSString *)name;
@@ -24,4 +26,6 @@
 -(NSString *) getName;
 -(NSString *) getBasicInfo;
 -(NSString *) getMoreInfo;
+
+-(void) getRelativePos:(float *)pos;
 @end

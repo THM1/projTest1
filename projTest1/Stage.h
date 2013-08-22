@@ -15,5 +15,8 @@
 
 -(Stage *)initWithName:(NSString *)name andPosition:(float *)pos;
 -(void)getPos:(float *)pos;
+-(NSString *)getName;
+
+-(CGPoint)getCGPoint;
 
 @end

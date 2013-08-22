@@ -31,8 +31,15 @@
 
 -(void)setPos:(float *)pos
 {
-    for(int i=0; i<3; i++)
+    for(int i=0; i<2; i++)
         _pos[i] = pos[i];
+    
+    _pos[2] = 0;
+}
+
+-(NSString *)getName
+{
+    return _name;
 }
 
 -(void)getPos:(float *)pos
@@ -41,6 +48,10 @@
         pos[i] = _pos[i];
 }
 
-
+-(CGPoint)getCGPoint
+{
+    CGPoint pos = CGPointMake(_pos[0], _pos[1]);
+    return pos;
+}
 
 @end

@@ -1,0 +1,12 @@
+digraph y{
+	FOXO1 -> "Ikaros Family";
+	"Ikaros Family" -> E2A;
+	"Ikaros Family" -> "IRF4/8";
+	"IRF4/8" -> Pax5;
+	"IRF4/8" -> "Ikaros Family";
+	E2A -> EBF1;
+	E2A -> FOXO1;
+	EBF1 -> FOXO1;
+	EBF1 -> Pax5;
+	Pax5 -> EBF1;
+}

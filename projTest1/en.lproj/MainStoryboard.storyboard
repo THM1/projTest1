@@ -11,14 +11,53 @@
                     <view key="view" contentMode="scaleToFill" id="5" customClass="GLKView">
                         <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <pageControl opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" numberOfPages="3" translatesAutoresizingMaskIntoConstraints="NO" id="tPJ-2S-Pq2"/>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
+                        <gestureRecognizers/>
+                        <constraints>
+                            <constraint firstItem="tPJ-2S-Pq2" firstAttribute="centerX" secondItem="5" secondAttribute="centerX" type="default" id="B5Y-5D-XVc"/>
+                            <constraint firstAttribute="bottom" secondItem="tPJ-2S-Pq2" secondAttribute="bottom" constant="302" id="N3H-W8-fGg"/>
+                        </constraints>
+                        <connections>
+                            <outletCollection property="gestureRecognizers" destination="FfN-NP-e26" appends="YES" id="Icj-wr-11V"/>
+                        </connections>
+                    </view>
+                    <navigationItem key="navigationItem" id="eLq-T7-MtX"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="3" sceneMemberID="firstResponder"/>
+                <swipeGestureRecognizer direction="right" id="FfN-NP-e26">
+                    <connections>
+                        <segue destination="9sW-cp-yPx" kind="modal" id="BI6-6p-LUm"/>
+                    </connections>
+                </swipeGestureRecognizer>
+            </objects>
+            <point key="canvasLocation" x="-1815" y="-705"/>
+        </scene>
+        <!--View Controller-->
+        <scene sceneID="f6X-bj-Pn9">
+            <objects>
+                <viewController id="9sW-cp-yPx" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="4FF-VD-Fhh">
+                        <rect key="frame" x="0.0" y="0.0" width="768" height="1024"/>
+                        <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="calibratedWhite"/>
                     </view>
                 </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="3" sceneMemberID="firstResponder"/>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="W7b-4h-ZW2" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="-1089" y="-865"/>
+            <point key="canvasLocation" x="-931" y="-739"/>
         </scene>
     </scenes>
+    <classes>
+        <class className="NSLayoutConstraint" superclassName="NSObject">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/NSLayoutConstraint.h"/>
+        </class>
+        <class className="ViewController" superclassName="GLKViewController">
+            <source key="sourceIdentifier" type="project" relativePath="./Classes/ViewController.h"/>
+        </class>
+    </classes>
     <simulatedMetricsContainer key="defaultSimulatedMetrics">
         <nil key="statusBar"/>
         <simulatedOrientationMetrics key="orientation"/>

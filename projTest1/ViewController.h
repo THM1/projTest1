@@ -10,6 +10,7 @@
 #import <GLKit/GLKit.h>
 #import "Node.h"
 #import "Sphere.h"
+#import "GeneRegulationMap.h"
 
 #define NUM_NODES 25
 
@@ -100,6 +101,8 @@ float _translate[9] = {1.0f, 1.0f, 1.0f, 2.0f, 2.0f, 2.0f, 3.0f, 0.0f, 0.0f};
     
     UILabel *nodeName;
     UILabel *nodeConnectedTo;
+    
+    GeneRegulationMap *_GRM;
 }
 
 @end

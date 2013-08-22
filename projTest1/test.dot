@@ -1,0 +1,8 @@
+digraph x{
+	MLP -> CLP;
+	CLP -> "pre-pro-B Fr.A";
+	CLP -> "T cell progenitors";
+	"pre-pro-B Fr.A" -> "pro-B Fr.B/C";
+	"pro-B Fr.B/C" -> "cycling pre-B Fr.C'";
+	"cycling pre-B Fr.C'" -> "resting pre-B Fr.D";
+}

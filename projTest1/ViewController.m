@@ -90,6 +90,11 @@
         exit(1);
     }
     
+    
+    _GRM = [[GeneRegulationMap alloc] init];
+    
+    
+    
     // setup the gl screen
     [self setupGL];
     
@@ -197,8 +202,10 @@
 -(void) tapRecognizer: (UITapGestureRecognizer *) recognizer
 {
     CGPoint touch = [recognizer locationInView:self.view];
-    //NSLog(@"TAP: %f   %f", (float)touch.x, (float)touch.y);
+    [_GRM registerTouchAtPoint:touch onView:self.view];
     
+    //NSLog(@"TAP: %f   %f", (float)touch.x, (float)touch.y);
+    /*
     int pixelsXY[2];
     pixelsXY[0] = (int)self.view.bounds.size.width;  // 768
     pixelsXY[1] = (int)self.view.bounds.size.height; // 1024
@@ -246,7 +253,7 @@
         NSLog(@"%f", _zValue);
     }*/
     //NSLog(@"TAPPED");
-    
+
 }
 
 
@@ -370,11 +377,13 @@
     //glVertexAttribPointer(GLKVertexAttribNormal, 3, GL_FLOAT, GL_FALSE, 24, BUFFER_OFFSET(12));
     */
     
+    /*
     UILabel* label = [[UILabel alloc] initWithFrame:CGRectMake(50, 50, 100, 44)];
     label.backgroundColor = [UIColor blueColor];
     label.textColor = [UIColor colorWithRed:0.0f green:1.0f blue:0.4f alpha:1.0f];
     [self.view addSubview:label];
     label.text = @"Hello World";
+     */
 }
 
 - (void)tearDownGL
@@ -430,7 +439,7 @@
     
     //_rotation += self.timeSinceLastUpdate * 0.5f;
     
-    
+    [_GRM drawGeneMapWithView:self.view andContext:self.context];
 }
 
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect
@@ -440,7 +449,7 @@
     //glClearColor(0.65f, 0.65f, 0.65f, 1.0f);
     glClearColor(0.95f, 0.92f, 0.8f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    
+    /*
     glBindVertexArrayOES(_vertexArray);
     
     // Render the object with GLKit
@@ -475,7 +484,7 @@
     
     GLuint numIndices = sizeof(_lineIndexData)/sizeof(_lineIndexData[0]);
     glDrawElements(GL_LINES, numIndices, GL_UNSIGNED_INT, _lineIndexData);
-    
+    */
 }
 
 

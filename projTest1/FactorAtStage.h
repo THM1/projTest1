@@ -20,7 +20,11 @@
 -(void) setPValue: (float *)pVal;
 -(void) setOddsRatio: (float *)oddsRatio;
 
--(UIColor *) getColourForPValue: (float *)pVal;
--(float *) getFontSizeForOddsRatio:(float *)oddsRatio;
+//-(UIColor *) getColourForPValue: (float *)pVal;
+//-(float *) getFontSizeForOddsRatio:(float *)oddsRatio;
 
+-(UIColor *)getColour;
+-(float)getFontSize;
+
+-(UILabel *)getLabel;
 @end
