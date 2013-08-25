@@ -39,7 +39,7 @@
 		77BE918617A402C500EE2885 /* factor_info.txt in Resources */ = {isa = PBXBuildFile; fileRef = 77BE918517A402C500EE2885 /* factor_info.txt */; };
 		77EB130C176534F8008CB88E /* Sphere.m in Sources */ = {isa = PBXBuildFile; fileRef = 77EB130B176534F8008CB88E /* Sphere.m */; };
 		77F80706178CD83300BA612C /* FactorFamily.m in Sources */ = {isa = PBXBuildFile; fileRef = 77F80705178CD83300BA612C /* FactorFamily.m */; };
-		77F80709178CD9EE00BA612C /* FactorAtStage.m in Sources */ = {isa = PBXBuildFile; fileRef = 77F80708178CD9EE00BA612C /* FactorAtStage.m */; };
+		77F80709178CD9EE00BA612C /* FactorAtLink.m in Sources */ = {isa = PBXBuildFile; fileRef = 77F80708178CD9EE00BA612C /* FactorAtLink.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -98,8 +98,8 @@
 		77EB130B176534F8008CB88E /* Sphere.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Sphere.m; sourceTree = "<group>"; };
 		77F80704178CD83300BA612C /* FactorFamily.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FactorFamily.h; sourceTree = "<group>"; };
 		77F80705178CD83300BA612C /* FactorFamily.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FactorFamily.m; sourceTree = "<group>"; };
-		77F80707178CD9EE00BA612C /* FactorAtStage.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FactorAtStage.h; sourceTree = "<group>"; };
-		77F80708178CD9EE00BA612C /* FactorAtStage.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FactorAtStage.m; sourceTree = "<group>"; };
+		77F80707178CD9EE00BA612C /* FactorAtLink.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = FactorAtLink.h; sourceTree = "<group>"; };
+		77F80708178CD9EE00BA612C /* FactorAtLink.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = FactorAtLink.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -195,8 +195,8 @@
 				7797868C1790D36D003F0900 /* Stage.m */,
 				77F80704178CD83300BA612C /* FactorFamily.h */,
 				77F80705178CD83300BA612C /* FactorFamily.m */,
-				77F80707178CD9EE00BA612C /* FactorAtStage.h */,
-				77F80708178CD9EE00BA612C /* FactorAtStage.m */,
+				77F80707178CD9EE00BA612C /* FactorAtLink.h */,
+				77F80708178CD9EE00BA612C /* FactorAtLink.m */,
 				77EB130A176534F8008CB88E /* Sphere.h */,
 				77EB130B176534F8008CB88E /* Sphere.m */,
 				77992FD8174BE8AD002C251E /* projTest1-Info.plist */,
@@ -352,7 +352,7 @@
 				77992FF1174BE8AD002C251E /* ViewController.m in Sources */,
 				77EB130C176534F8008CB88E /* Sphere.m in Sources */,
 				77F80706178CD83300BA612C /* FactorFamily.m in Sources */,
-				77F80709178CD9EE00BA612C /* FactorAtStage.m in Sources */,
+				77F80709178CD9EE00BA612C /* FactorAtLink.m in Sources */,
 				7716C3E4178D9F190061FE9D /* GeneRegulationMap.m in Sources */,
 				7797868A1790D31A003F0900 /* Link.m in Sources */,
 				7797868D1790D36D003F0900 /* Stage.m in Sources */,

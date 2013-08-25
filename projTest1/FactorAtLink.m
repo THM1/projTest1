@@ -6,12 +6,20 @@
 //  Copyright (c) 2013 THM. All rights reserved.
 //
 
-#import "FactorAtStage.h"
+#import "FactorAtLink.h"
 
-@implementation FactorAtStage
+@implementation FactorAtLink
 
--(FactorAtStage *) initWithFactorFamily: (FactorFamily *)factorFam andPValue:(float *)pVal andOddsRatio: (float *)oddsRatio
+/**
+ * FactorAtLink constructor
+ * Input variables are FactorFamily (parent object), pValue and oddsRatio
+ * Calls the constructor of the parent object, passing the input variable FactorFamily
+ * Initialises the pValue and oddsRatio of the object
+ * Returns pointer to itself
+ */
+-(FactorAtLink *) initWithFactorFamily: (FactorFamily *)factorFam andPValue:(float *)pVal andOddsRatio: (float *)oddsRatio
 {
+    // parent constructor
     self = [super initWithFactorFamily:factorFam];
     
     if(self){
@@ -22,17 +30,24 @@
     return self;
 }
 
+/**
+ * Helper function that sets the pValue to the pValue passed in
+ */
 -(void) setPValue:(float *)pVal
 {
     _pValue = *pVal;
 }
-
+/**
+ * Helper function that sets the oddsRatio to the oddsRatio passed in
+ */
 -(void) setOddsRatio:(float *)oddsRatio
 {
     _oddsRatio = *oddsRatio;
 }
 
-
+/**
+ * Private function that returns the colour (for the label) depending on the pValue
+ */
 -(UIColor *) getColourForPValue: (float *)pVal
 {
     UIColor *colour;
@@ -49,7 +64,9 @@
     return colour;
 }
 
-
+/**
+ * Private function that returns the font size (for the label) depending on the odds Ratio
+ */
 -(float) getFontSizeForOddsRatio:(float *)oddsRatio
 {
     float fontsize = 8.0f;
@@ -65,16 +82,26 @@
     return fontsize;
 }
 
+/**
+ * Public function that uses a helper function to get the colour of the label
+ * Returns the colour
+ */
 -(UIColor *)getColour
 {
     UIColor *colour = [[UIColor alloc] init];
     colour = [self getColourForPValue:&(_pValue)];
     return colour;
 }
+
+/**
+ * Public function that uses a helper function to get the font size of the label
+ * Returns the font size
+ */
 -(float)getFontSize
 {
     return [self getFontSizeForOddsRatio:&_oddsRatio];
 }
+
 
 -(UILabel *)getLabel
 {

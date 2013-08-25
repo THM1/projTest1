@@ -439,7 +439,7 @@
     
     //_rotation += self.timeSinceLastUpdate * 0.5f;
     
-    [_GRM drawGeneMapWithView:self.view andContext:self.context];
+    [_GRM drawGeneMapWithView:self.view];
 }
 
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect

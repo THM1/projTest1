@@ -73,11 +73,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "projTest1/GeneRegulationMap.m"
-         timestampString = "397537093.807289"
+         timestampString = "399086211.136487"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "105"
-         endingLineNumber = "105"
+         startingLineNumber = "122"
+         endingLineNumber = "122"
          landmarkName = "-setupStages"
          landmarkType = "5">
       </FileBreakpoint>
@@ -86,11 +86,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "projTest1/GeneRegulationMap.m"
-         timestampString = "397537093.807289"
+         timestampString = "399086211.136487"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "100"
-         endingLineNumber = "100"
+         startingLineNumber = "117"
+         endingLineNumber = "117"
          landmarkName = "-setupStages"
          landmarkType = "5">
       </FileBreakpoint>
@@ -99,11 +99,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "projTest1/GeneRegulationMap.m"
-         timestampString = "397537093.807289"
+         timestampString = "399086211.136487"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "133"
-         endingLineNumber = "133"
+         startingLineNumber = "150"
+         endingLineNumber = "150"
          landmarkName = "-setupStages"
          landmarkType = "5">
       </FileBreakpoint>
@@ -112,11 +112,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "projTest1/Link.m"
-         timestampString = "398139611.252386"
+         timestampString = "399007066.834928"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "318"
-         endingLineNumber = "318"
+         startingLineNumber = "374"
+         endingLineNumber = "374"
          landmarkName = "-loadFactorData"
          landmarkType = "5">
       </FileBreakpoint>
@@ -125,11 +125,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "projTest1/GeneRegulationMap.m"
-         timestampString = "397537093.807289"
+         timestampString = "399086211.136487"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "132"
-         endingLineNumber = "132"
+         startingLineNumber = "149"
+         endingLineNumber = "149"
          landmarkName = "-setupStages"
          landmarkType = "5">
       </FileBreakpoint>
@@ -138,11 +138,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "projTest1/GeneRegulationMap.m"
-         timestampString = "397537060.522507"
+         timestampString = "399086211.136487"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "74"
-         endingLineNumber = "74"
+         startingLineNumber = "91"
+         endingLineNumber = "91"
          landmarkName = "-setupStages"
          landmarkType = "5">
       </FileBreakpoint>
@@ -150,39 +150,26 @@
          shouldBeEnabled = "No"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
-         filePath = "projTest1/Link.m"
-         timestampString = "398741232.395196"
+         filePath = "projTest1/GeneRegulationMap.m"
+         timestampString = "399086752.834994"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "384"
-         endingLineNumber = "384"
+         startingLineNumber = "195"
+         endingLineNumber = "195"
+         landmarkName = "-drawGeneMapWithView:"
+         landmarkType = "5">
+      </FileBreakpoint>
+      <FileBreakpoint
+         shouldBeEnabled = "No"
+         ignoreCount = "0"
+         continueAfterRunningActions = "No"
+         filePath = "projTest1/Link.m"
+         timestampString = "399007066.834928"
+         startingColumnNumber = "9223372036854775807"
+         endingColumnNumber = "9223372036854775807"
+         startingLineNumber = "522"
+         endingLineNumber = "522"
          landmarkName = "-getArrow:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "projTest1/GeneRegulationMap.m"
-         timestampString = "398741638.276077"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "175"
-         endingLineNumber = "175"
-         landmarkName = "-drawGeneMapWithView:andContext:"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "projTest1/Link.m"
-         timestampString = "398741232.395196"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "413"
-         endingLineNumber = "413"
-         landmarkName = "-checkTouched:"
          landmarkType = "5">
       </FileBreakpoint>
       <FileBreakpoint
@@ -216,24 +203,24 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "projTest1/Link.m"
-         timestampString = "397961850.676345"
+         timestampString = "399007066.834928"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "28"
-         endingLineNumber = "28"
-         landmarkName = "-initWithPrev:andNext:"
-         landmarkType = "5">
+         startingLineNumber = "35"
+         endingLineNumber = "35"
+         landmarkName = "-displayFactorsHelper:"
+         landmarkType = "4">
       </FileBreakpoint>
       <FileBreakpoint
          shouldBeEnabled = "No"
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "projTest1/Link.m"
-         timestampString = "398139611.252386"
+         timestampString = "399007066.834928"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "297"
-         endingLineNumber = "297"
+         startingLineNumber = "353"
+         endingLineNumber = "353"
          landmarkName = "-loadFactorData"
          landmarkType = "5">
       </FileBreakpoint>
@@ -242,11 +229,11 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "projTest1/Link.m"
-         timestampString = "398139611.252386"
+         timestampString = "399007066.834928"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "109"
-         endingLineNumber = "109"
+         startingLineNumber = "132"
+         endingLineNumber = "132"
          landmarkName = "-loadFactorFamilyData"
          landmarkType = "5">
       </FileBreakpoint>
@@ -255,25 +242,12 @@
          ignoreCount = "0"
          continueAfterRunningActions = "No"
          filePath = "projTest1/Link.m"
-         timestampString = "398139611.252386"
+         timestampString = "399007066.834928"
          startingColumnNumber = "9223372036854775807"
          endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "298"
-         endingLineNumber = "298"
+         startingLineNumber = "354"
+         endingLineNumber = "354"
          landmarkName = "-loadFactorData"
-         landmarkType = "5">
-      </FileBreakpoint>
-      <FileBreakpoint
-         shouldBeEnabled = "No"
-         ignoreCount = "0"
-         continueAfterRunningActions = "No"
-         filePath = "projTest1/Link.m"
-         timestampString = "398740697.847654"
-         startingColumnNumber = "9223372036854775807"
-         endingColumnNumber = "9223372036854775807"
-         startingLineNumber = "333"
-         endingLineNumber = "333"
-         landmarkName = "-getArrow:"
          landmarkType = "5">
       </FileBreakpoint>
    </FileBreakpoints>

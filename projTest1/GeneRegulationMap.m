@@ -13,6 +13,10 @@
 
 @implementation GeneRegulationMap
 
+/**
+ * Constructor that initialises the GeneRegulationMap 
+ * object and returns a pointer to itself
+ */
 -(GeneRegulationMap *)init
 {
     self = [super init];
@@ -25,6 +29,9 @@
     return self;
 }
 
+/**
+ * Private helper function that initialises the the arrays and dictionaries
+ */
 -(void)initialiseVariables
 {
     _stagesList = [[NSMutableDictionary alloc] init];
@@ -33,6 +40,16 @@
     _stages = [[NSMutableArray alloc] init];
 }
 
+/**
+ * Private helper function that loads all the stage and link information
+ * from a plain text file called regulation_graph.plain
+ *
+ * It contains all the information on the stages and links involved in that
+ * gene regulation map, and how they are connected, and their positions
+ *
+ * Using this information it initialises the Stages and Links and stores them
+ * in the arrays
+ */
 -(void)setupStages
 {
     // open file with gene regulation map details (nodes and edges)
@@ -135,45 +152,49 @@
     //[stagesInfoWordByWord dealloc];
 }
 
--(void)drawGeneMapWithView:(UIView *)view andContext:(EAGLContext *)context
+/**
+ * Public function that draws the gene regulation map on the view that is 
+ * passed to it
+ *
+ * It calls the getLabel function for each Stage in the stages array
+ * It calls the getArrow function for each Link in the links array
+ *
+ * It displays the obtained labels (UILabel) and arrows (UIImageView) to
+ * the provided view
+ *
+ * It has a static counter so that the map is only drawn once to the screen
+ */
+-(void)drawGeneMapWithView:(UIView *)view
 {
     static int count = 0;
-    
-    float labelSize[2] = {100, 40};
-    
+        
     if(!count){
-        //UILabel *label = [[UILabel alloc] init];
+
         unsigned int stageCount = [_stagesList count];
         unsigned int linksCount = [_linksList count];
         
+        // loop through all the stage objects
         for(int i=0; i<stageCount; i++){
             
             Stage *tempStage = [_stages objectAtIndexedSubscript:i];
-            float tempPos[3];
-            [tempStage getPos:tempPos];
             
-            CGRect stageRect = CGRectMake(tempPos[0] - labelSize[0]*0.5,    // label starts at top right but we want tempPos to be the central
-                                          tempPos[1] - labelSize[1]*0.5,    // position of the label, so adjust by shifting half labelSize in x & y
-                                          labelSize[0],
-                                          labelSize[1]);
+            // obtain the UILabel for above stage
+            UILabel *label = [tempStage getLabel];
             
-            UILabel *label = [[UILabel alloc] initWithFrame:stageRect];
-            //[label setText:[tempStage getName]];
-            label.text = [tempStage getName];
-            label.textColor = [UIColor blackColor];
-            label.textAlignment = NSTextAlignmentCenter;
-            
+            // display the label to the screen
             [view addSubview:label];
             
-            //if(i%2) label.hidden = YES;
         }
-         
+        
+        // loop through all the link objects
         for(int i=0; i<linksCount; i++){
             
             Link *tempLink = [_links objectAtIndexedSubscript:i];
 
+            // obtain the UIImageView of the arrow for above link
             UIImageView *imageView = [tempLink getArrow:view];
             
+            // display the imageView to the screen
             [view addSubview:imageView];
         }
     }
@@ -181,15 +202,31 @@
     count = 1;
 }
 
+/**
+ * Public function that takes as input a CGPoint of the touch position
+ * and the view which was touched
+ *
+ * It loops through all the link objects to see if the touch location
+ * was in and around the links in the map
+ *
+ * It modifies the view depending on the touch position. If no link was 
+ * touched then no modification to the view is made
+ */
 -(void)registerTouchAtPoint:(CGPoint)touchPos onView:(UIView *)view
 {
     NSUInteger count = [_links count];
     
+    // loop through all link objects and check if a link was touched
     for(int i=0; i<count; i++){
         
         Link *tempLink = [_links objectAtIndexedSubscript:i];
+        
+        // check if above link was touched
         BOOL touched = [tempLink checkTouched:touchPos];
         
+        // if touched call the displayFactors function to display the factor map
+        // for the touched link or to remove the factor map from the display if it
+        // already on the display
         if(touched){
             [tempLink displayFactors:view];
             return;
