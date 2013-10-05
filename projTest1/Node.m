@@ -225,7 +225,8 @@
 // return false if not selected, and true if selected
 -(BOOL) detectSelectedWithZVal:(float)zVal withAngle:(float)theta andDeltaXAndDeltaY:(int *)deltaXY andPixels:(int *)pixelsXY
 {
-    [self setClosestTouchedNode:FALSE];     // when touched, ensure closest node flag is UNSET
+    // when touched, ensure closest node flag is UNSET
+    [self setClosestTouchedNode:FALSE];
     
     float deltaZ = _transformedPoint[2] + zVal;         // zVal is negative, eye coords are inverted
     if(deltaZ > 0) return false;                        // Object is behind eye view, so cannot be selected
@@ -250,7 +251,7 @@
     deltaXYOfNode[0] = (int)(_transformedPoint[0] + zPlaneMaxXY[0])/(zPlaneMaxXY[0] * 2) * pixelsXY[0];
     deltaXYOfNode[1] = (int)(pixelsXY[1] - ((_transformedPoint[1] + zPlaneMaxXY[1])/(zPlaneMaxXY[1] * 2) * pixelsXY[1]));
 
-    // If it is within ten pixels of the touched point, in both x and y direction, return true
+    // If it is within 100 pixels of the touched point, in both x and y direction, return true
     // i.e. node is underneath the touched position area, and has been selected
     if(abs(deltaXYOfNode[0] - deltaXY[0])<100 && abs(deltaXYOfNode[1] - deltaXY[1])<100) return true;
 

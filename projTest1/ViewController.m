@@ -91,7 +91,7 @@
     }
     
     
-    _GRM = [[GeneRegulationMap alloc] init];
+    //_GRM = [[GeneRegulationMap alloc] init];
     
     
     
@@ -202,28 +202,33 @@
 -(void) tapRecognizer: (UITapGestureRecognizer *) recognizer
 {
     CGPoint touch = [recognizer locationInView:self.view];
-    [_GRM registerTouchAtPoint:touch onView:self.view];
     
-    //NSLog(@"TAP: %f   %f", (float)touch.x, (float)touch.y);
-    /*
+    // get the screen number of pixels
     int pixelsXY[2];
     pixelsXY[0] = (int)self.view.bounds.size.width;  // 768
     pixelsXY[1] = (int)self.view.bounds.size.height; // 1024
     
+    // get the touch location on this screen
     int touchXY[2];
     touchXY[0] = (int)touch.x;
     touchXY[1] = (int)touch.y;
     
-    //float screenXY[2];
     
     BOOL touched = false;
-    float zCurrent = _zValue;
+    float zCurrent = _zValue;           // current z position of the camera in the 3D OpenGL world
     float point[3];
     int closestTouchedNode = NUM_NODES; // no node numbered NUM_NODES: zero indexxed arrays
     
+    // for all nodes check if they were touched by calling each node's detectSelected.. method
     for(int i=0; i<NUM_NODES; i++){
-        touched = [_nodes[i] detectSelectedWithZVal:_zValue withAngle:PERSPECTIVE_ANGLE andDeltaXAndDeltaY:touchXY andPixels:pixelsXY];
+        touched = [_nodes[i] detectSelectedWithZVal:_zValue
+                                          withAngle:PERSPECTIVE_ANGLE
+                                 andDeltaXAndDeltaY:touchXY
+                                          andPixels:pixelsXY];
         
+        // if they were within touch vicinity then obtain the z position of that node
+        // compare the z-position with current closest node to camera
+        // if it is closer then update current closest node to this one
         if(touched){
             
             [_nodes[i] getTransformedPoint:point];
@@ -236,6 +241,7 @@
         else NSLog(@"not touched %d", i);
     }
     
+    // once the tap gesture ends call set the closest node so it changes colour
     if(UIGestureRecognizerStateEnded){
         if(closestTouchedNode != NUM_NODES)
             [_nodes[closestTouchedNode] setClosestTouchedNode:TRUE];
@@ -246,14 +252,6 @@
                 NSLog(@"closest touched node: %d", closestTouchedNode);
         }
     }
-    //float nodes[3];
-    /*for(int i=0; i<NUM_NODES; i++){
-        [_nodes[i] getTransformedPoint: nodes];
-        NSLog(@"pos%d: %f   %f   %f", i, nodes[0], nodes[1], nodes[2]);
-        NSLog(@"%f", _zValue);
-    }*/
-    //NSLog(@"TAPPED");
-
 }
 
 
@@ -439,7 +437,7 @@
     
     //_rotation += self.timeSinceLastUpdate * 0.5f;
     
-    [_GRM drawGeneMapWithView:self.view];
+    //[_GRM drawGeneMapWithView:self.view];
 }
 
 - (void)glkView:(GLKView *)view drawInRect:(CGRect)rect
@@ -449,7 +447,7 @@
     //glClearColor(0.65f, 0.65f, 0.65f, 1.0f);
     glClearColor(0.95f, 0.92f, 0.8f, 1.0f);
     glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-    /*
+    
     glBindVertexArrayOES(_vertexArray);
     
     // Render the object with GLKit
@@ -467,8 +465,7 @@
         glUniformMatrix3fv(uniforms[UNIFORM_NORMAL_MATRIX], 1, 0, nodeNormal[i].m);
         glUniform4f(uniforms[UNIFORM_COLOUR], tempColour[0], tempColour[1], tempColour[2], tempColour[3]);
         
-        // draw each node
-        //[_nodes[i] draw:&_vertexArray withIndices:_sphereIndexArray withModelView:&nodeModelView[i] withNormal:&nodeNormal[i] withProgram:&_program];
+        // draw each spherical node
         glDrawElements(GL_TRIANGLES, sizeof(_sphereIndexArray)/sizeof(_sphereIndexArray[0]), GL_UNSIGNED_INT, _sphereIndexArray);
 
     }
@@ -484,7 +481,7 @@
     
     GLuint numIndices = sizeof(_lineIndexData)/sizeof(_lineIndexData[0]);
     glDrawElements(GL_LINES, numIndices, GL_UNSIGNED_INT, _lineIndexData);
-    */
+    
 }
 
 

@@ -76,11 +76,6 @@
 
 -(void) calculatePoints: (sphereVertex *)vertArray withRows: (GLuint)numRows andPointsPerRow: (GLuint)pointsPerRow
 {
-    //GLuint numRows = 16;
-    //GLuint pointsPerRow = 16;
-    
-    //GLuint numVertices = (_numRows-2) * _pointsPerRow + 2; // top and bottom rows are two points
-    
     GLfloat x, y, z;
     double r;
     
